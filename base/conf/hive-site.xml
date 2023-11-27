@@ -42,8 +42,8 @@
     </property>
 
     <!-- To Grant Impersonation Access From Beeline Client -->
-    <property>
+    <!-- <property>
         <name>hive.server2.enable.doAs</name>
         <value>false</value>
-    </property>    
+    </property>     -->
 </configuration>

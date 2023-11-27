@@ -13,6 +13,12 @@ RUN sed -i -e "s|http://archive.ubuntu.com|http://jp.archive.ubuntu.com|g" /etc/
       python-is-python3 \
       coreutils \
       libc6-dev \
+      krb5-user \
+      libkrb5-dev \
+      libkrb5-3 \
+      iputils-ping \
+      net-tools \
+      jsvc \
  && rm -rf /var/lib/apt/lists/*
 
 ARG USERNAME=jovyan
@@ -50,8 +56,10 @@ ENV PATH=$HADOOP_HOME/sbin:$HADOOP_HOME/bin:$PATH
 ENV LD_LIBRARY_PATH=$HADOOP_HOME/lib/native:$LD_LIBRARY_PATH
 
 # Spark
-ARG SPARK_VERSION=3.3.1
+ARG SPARK_VERSION=3.4.1
 ARG SPARK_URL=https://archive.apache.org/dist/spark/spark-$SPARK_VERSION/spark-$SPARK_VERSION-bin-hadoop3.tgz
+# ARG SPARK_URL=https://archive.apache.org/dist/spark/spark-$SPARK_VERSION/spark-$SPARK_VERSION-bin-hadoop2.7.tgz 
+
 ENV SPARK_HOME=/opt/spark
 
 RUN set -x \
@@ -97,13 +105,19 @@ COPY --chown=$USERNAME:$GROUPNAME conf/core-site.xml $HADOOP_CONF_DIR/
 COPY --chown=$USERNAME:$GROUPNAME conf/hdfs-site.xml $HADOOP_CONF_DIR/
 COPY --chown=$USERNAME:$GROUPNAME conf/yarn-site.xml $HADOOP_CONF_DIR/
 COPY --chown=$USERNAME:$GROUPNAME conf/mapred-site.xml $HADOOP_CONF_DIR/
+COPY --chown=$USERNAME:$GROUPNAME conf/ssl-server.xml $HADOOP_CONF_DIR/
+
 COPY --chown=$USERNAME:$GROUPNAME conf/workers $HADOOP_CONF_DIR/
 COPY --chown=$USERNAME:$GROUPNAME conf/spark-defaults.conf $SPARK_CONF_DIR/
 COPY --chown=$USERNAME:$GROUPNAME conf/log4j.properties $SPARK_CONF_DIR/
 COPY --chown=$USERNAME:$GROUPNAME conf/hive-site.xml $HIVE_CONF_DIR/
 
+
 RUN ln $HADOOP_CONF_DIR/workers $SPARK_CONF_DIR/ \
  && ln $HIVE_CONF_DIR/hive-site.xml $SPARK_CONF_DIR/
+
+# COPY kb5/krb5.conf /etc/krb5.conf
+ENV KRB5CCNAME=/tmp/krb5cc
 
 # Entry point
 COPY entrypoint.sh /usr/local/sbin/entrypoint.sh

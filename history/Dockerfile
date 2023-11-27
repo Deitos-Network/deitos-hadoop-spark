@@ -1,4 +1,6 @@
-FROM hadoop-hive-spark-base
+FROM deitos-hadoop-base
+
+ENV KRB5CCNAME=/tmp/krb5cc
 
 COPY run.sh /usr/local/sbin/run.sh
 RUN sudo chmod a+x /usr/local/sbin/run.sh

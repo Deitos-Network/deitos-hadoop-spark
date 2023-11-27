@@ -1,4 +1,31 @@
-FROM hadoop-hive-spark-base
+FROM deitos-hadoop-base
+
+USER root
+
+RUN sed -i -e "s|http://archive.ubuntu.com|http://jp.archive.ubuntu.com|g" /etc/apt/sources.list \
+ && apt-get -qq update  \
+ && DEBIAN_FRONTEND=noninteractive apt-get -qq install --no-install-recommends \
+      sudo \
+      openjdk-8-jdk \
+      curl \
+      gnupg \
+      procps \
+      python3.10 \
+      python3.10-distutils \
+      python-is-python3 \
+      coreutils \
+      libc6-dev \
+      krb5-user \
+      libkrb5-dev \
+      libkrb5-3 \
+ && rm -rf /var/lib/apt/lists/*
+
+ARG USERNAME=jovyan
+ARG GROUPNAME=jovyan
+ARG UID=1001
+ARG GID=1001
+
+USER $USERNAME
 
 ENV NAMEDIR=/opt/hadoop/dfs/name
 RUN mkdir -p /opt/hadoop/dfs/name
@@ -12,6 +39,8 @@ ENV SPARK_PUBLIC_DNS=localhost
 ENV SPARK_LOGS_HDFS_PATH=/var/log/spark
 ENV SPARK_JARS_HDFS_PATH=/spark/jars
 
+ENV KRB5CCNAME=/tmp/krb5cc
+
 COPY run.sh /usr/local/sbin/run.sh
-RUN sudo chmod a+x /usr/local/sbin/run.sh
+RUN sudo chmod a+x /usr/local/sbin/run.sh 
 CMD ["run.sh"]

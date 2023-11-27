@@ -16,6 +16,9 @@ RUN sed -i -e "s|http://archive.ubuntu.com|http://jp.archive.ubuntu.com|g" /etc/
       python3-venv \
       coreutils \
       libc6-dev \
+      krb5-user \
+      libkrb5-dev \
+      libkrb5-3 \      
  && sudo rm -rf /var/lib/apt/lists/*
 
 ARG USERNAME=jovyan
@@ -43,6 +46,9 @@ ENV PATH=$SPARK_HOME/sbin:$SPARK_HOME/bin:$PATH
 COPY --from=base  /opt/hive /opt/hive
 ENV HIVE_HOME=/opt/hive
 ENV HIVE_CONF_DIR=$HIVE_HOME/conf
+
+ENV KRB5CCNAME=/tmp/krb5cc
+
 ENV PATH=$HIVE_HOME/sbin:$HIVE_HOME/bin:$PATH
 
 RUN pip install -U pip 
