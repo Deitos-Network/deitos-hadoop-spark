@@ -2,8 +2,7 @@ FROM deitos-hadoop-base
 
 USER root
 
-RUN sed -i -e "s|http://archive.ubuntu.com|http://jp.archive.ubuntu.com|g" /etc/apt/sources.list \
- && apt-get -qq update  \
+RUN apt-get -qq update  \
  && DEBIAN_FRONTEND=noninteractive apt-get -qq install --no-install-recommends \
       sudo \
       openjdk-8-jdk \
@@ -17,8 +16,8 @@ RUN sed -i -e "s|http://archive.ubuntu.com|http://jp.archive.ubuntu.com|g" /etc/
       libc6-dev \
       krb5-user \
       libkrb5-dev \
-      libkrb5-3 \
- && rm -rf /var/lib/apt/lists/*
+      libkrb5-3 
+#  && rm -rf /var/lib/apt/lists/*
 
 ARG USERNAME=jovyan
 ARG GROUPNAME=jovyan
@@ -35,7 +34,7 @@ VOLUME /opt/hadoop/dfs/name
 #RUN mkdir -p /opt/hadoop/dfs/namesecondary
 #VOLUME /opt/hadoop/dfs/namesecondary
 
-ENV SPARK_PUBLIC_DNS=localhost
+ENV SPARK_MASTER_ADDRESS=spark://master.deitos.network:7077
 ENV SPARK_LOGS_HDFS_PATH=/var/log/spark
 ENV SPARK_JARS_HDFS_PATH=/spark/jars
 

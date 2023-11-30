@@ -1,11 +1,10 @@
 ARG PYTHON_VERSION=3.10
-FROM hadoop-hive-spark-base AS base
+FROM deitos-hadoop-base AS base
 FROM jupyter/minimal-notebook:python-3.10.4
 
 USER root
 
-RUN sed -i -e "s|http://archive.ubuntu.com|http://jp.archive.ubuntu.com|g" /etc/apt/sources.list \
- && apt-get -qq update  \
+RUN apt-get -qq update  \
  && DEBIAN_FRONTEND=noninteractive apt-get -qq install --no-install-recommends \
       sudo \
       openjdk-8-jdk \
@@ -18,8 +17,8 @@ RUN sed -i -e "s|http://archive.ubuntu.com|http://jp.archive.ubuntu.com|g" /etc/
       libc6-dev \
       krb5-user \
       libkrb5-dev \
-      libkrb5-3 \      
- && sudo rm -rf /var/lib/apt/lists/*
+      libkrb5-3       
+#  && sudo rm -rf /var/lib/apt/lists/*
 
 ARG USERNAME=jovyan
 

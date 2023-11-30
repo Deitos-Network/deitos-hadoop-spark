@@ -4,7 +4,6 @@ ENV DATADIR=/opt/hadoop/dfs/data
 RUN mkdir -p /opt/hadoop/dfs/data
 VOLUME /opt/hadoop/dfs/data
 
-ENV SPARK_PUBLIC_DNS=localhost
 ENV SPARK_MASTER_ADDRESS=spark://master.deitos.network:7077
 
 # COPY ../keytabs/* $HADOOP_CONF_DIR/keytabs

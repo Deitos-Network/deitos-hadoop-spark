@@ -11,17 +11,22 @@
     <property>
          <name>mapreduce.jobhistory.principal</name>
          <value>jhs/_HOST@DEITOS.NETWORK</value>
-    </property> 
-     
+    </property>      
+
+    <property>
+         <name>mapreduce.jobhistory.address</name>
+         <value>0.0.0.0:18080</value>
+    </property>
+
     <property>
          <name>mapreduce.jobhistory.webapp.address</name>
          <value>0.0.0.0:19888</value>
     </property> 
      
-    <property>
+    <!-- <property>
          <name>mapreduce.jobhistory.webapp.https.address</name>
          <value>0.0.0.0:19889</value>
-    </property> 
+    </property>  -->
      
     <property>
          <name>mapreduce.jobhistory.webapp.spnego-keytab-file</name>

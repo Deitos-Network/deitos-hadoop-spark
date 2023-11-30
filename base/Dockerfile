@@ -1,7 +1,6 @@
 FROM ubuntu:latest
 
-RUN sed -i -e "s|http://archive.ubuntu.com|http://jp.archive.ubuntu.com|g" /etc/apt/sources.list \
- && apt-get -qq update  \
+RUN apt-get -qq update  \
  && DEBIAN_FRONTEND=noninteractive apt-get -qq install --no-install-recommends \
       sudo \
       openjdk-8-jdk \
@@ -18,8 +17,8 @@ RUN sed -i -e "s|http://archive.ubuntu.com|http://jp.archive.ubuntu.com|g" /etc/
       libkrb5-3 \
       iputils-ping \
       net-tools \
-      jsvc \
- && rm -rf /var/lib/apt/lists/*
+      jsvc 
+#  && rm -rf /var/lib/apt/lists/*
 
 ARG USERNAME=jovyan
 ARG GROUPNAME=jovyan
@@ -106,6 +105,7 @@ COPY --chown=$USERNAME:$GROUPNAME conf/hdfs-site.xml $HADOOP_CONF_DIR/
 COPY --chown=$USERNAME:$GROUPNAME conf/yarn-site.xml $HADOOP_CONF_DIR/
 COPY --chown=$USERNAME:$GROUPNAME conf/mapred-site.xml $HADOOP_CONF_DIR/
 COPY --chown=$USERNAME:$GROUPNAME conf/ssl-server.xml $HADOOP_CONF_DIR/
+COPY --chown=$USERNAME:$GROUPNAME conf/ssl-client.xml $HADOOP_CONF_DIR/
 
 COPY --chown=$USERNAME:$GROUPNAME conf/workers $HADOOP_CONF_DIR/
 COPY --chown=$USERNAME:$GROUPNAME conf/spark-defaults.conf $SPARK_CONF_DIR/

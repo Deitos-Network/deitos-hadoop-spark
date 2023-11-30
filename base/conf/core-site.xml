@@ -60,6 +60,10 @@
         <name>hadoop.ssl.server.conf</name>
         <value>ssl-server.xml</value>
     </property>
+    <property>
+        <name>hadoop.ssl.client.conf</name>
+        <value>ssl-client.xml</value>
+    </property>    
 
     <property>
       <name>hadoop.security.auth_to_local</name>
@@ -69,6 +73,7 @@
         RULE:[2:$1@$0](hm@.*DEITOS.NETWORK)s/.*/root/
         RULE:[2:$1@$0](rs@.*DEITOS.NETWORK)s/.*/root/
         RULE:[2:$1@$0](rm@.*DEITOS.NETWORK)s/.*/root/
+        RULE:[2:$1@$0](nm@.*DEITOS.NETWORK)s/.*/root/
         RULE:[2:$1@$0](jhs@.*DEITOS.NETWORK)s/.*/root/
         RULE:[2:$1@$0](hive@.*DEITOS.NETWORK)s/.*/root/
         DEFAULT

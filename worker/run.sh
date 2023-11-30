@@ -8,7 +8,7 @@ export KERBEROS_ROOT_USER_PASSWORD=password
 export KRB_REALM=DEITOS.NETWORK
 export KEYTAB_DIR=/opt/hadoop/etc/hadoop/keytabs
 
-export SPARK_LOCAL_IP="127.0.0.1"
+export SPARK_PUBLIC_DNS=$(hostname -f)
 
 kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "addprinc -pw password root@$KRB_REALM"
 

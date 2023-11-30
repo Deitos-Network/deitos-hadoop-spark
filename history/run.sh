@@ -1,11 +1,13 @@
 #!/bin/bash
-until sleep 5; do sleep 2; done
+until sleep 10; do sleep 10; done
 
 export KERBEROS_ADMIN=admin/admin
 export KERBEROS_ADMIN_PASSWORD=admin
 export KERBEROS_ROOT_USER_PASSWORD=password
 export KRB_REALM=DEITOS.NETWORK
 export KEYTAB_DIR=/opt/hadoop/etc/hadoop/keytabs
+
+export SPARK_PUBLIC_DNS=$(hostname -f)
 
 kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "addprinc -pw password root@$KRB_REALM"
 
@@ -18,7 +20,7 @@ kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "addprinc -randkey yarn
 kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "addprinc -randkey rm/$(hostname -f)@$KRB_REALM"
 kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "addprinc -randkey nm/$(hostname -f)@$KRB_REALM"
 
-kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "xst -k $HOME/nn.keytab nn/$(hostname -f) HTTP/$(hostname -f) "
+kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "xst -k $HOME/nn.keytab nn/$(hostname -f) HTTP/$(hostname -f) hive/$(hostname -f) "
 kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "xst -k $HOME/dn.keytab dn/$(hostname -f)"
 kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "xst -k $HOME/spnego.keytab HTTP/$(hostname -f)"
 kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "xst -k $HOME/jhs.keytab jhs/$(hostname -f)"
@@ -62,9 +64,9 @@ chmod 700 $KEYTAB_DIR/keystore.jks
 chown jovyan $KEYTAB_DIR/keystore.jks
 
 echo "Starting Hadoop history server..."
-while true; do sleep 1000; done
-# mapred --daemon start historyserver 
+mapred --daemon start historyserver 
 # mapred historyserver
 
-# echo "Starting Spark history server..."
-# spark-class org.apache.spark.deploy.history.HistoryServer 
+echo "Starting Spark history server..."
+spark-class org.apache.spark.deploy.history.HistoryServer 
+while true; do sleep 1000; done

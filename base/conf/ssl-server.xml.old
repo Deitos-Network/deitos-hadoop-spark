@@ -29,21 +29,6 @@
   </property>
 
   <property>
-    <name>ssl.server.truststore.type</name>
-    <value>jks</value>
-    <description>Optional. The keystore file format, default value is "jks".
-    </description>
-  </property>
-
-<property>
-  <name>ssl.server.truststore.reload.interval</name>
-  <value>10000</value>
-  <description>Truststore reload check interval, in milliseconds.
-  Default value is 10000 (10 seconds).
-  </description>
-</property>  
-
-  <property>
     <name>ssl.server.keystore.location</name>
     <value>/opt/hadoop/etc/hadoop/keytabs/keystore.jks</value>
   </property>
@@ -57,12 +42,5 @@
     <name>ssl.server.keystore.keypassword</name>
     <value>changeme</value>
   </property>
-
-<property>
-  <name>ssl.server.keystore.type</name>
-  <value>jks</value>
-  <description>Optional. The keystore file format, default value is "jks".
-  </description>
-</property>  
 
 </configuration>
