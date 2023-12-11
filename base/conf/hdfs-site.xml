@@ -70,23 +70,32 @@
          </description>
     </property>
 
+  <property>
+    <name>dfs.webhdfs.enabled</name>
+    <value>true</value>
+  </property>
 
-    <property>
-         <name>dfs.web.authentication.kerberos.principal</name>
-         <value>HTTP/_HOST@DEITOS.NETWORK</value>
-         <description> The HTTP Kerberos principal used by Hadoop-Auth in the HTTP endpoint.
-         The HTTP Kerberos principal MUST start with 'HTTP/' per Kerberos HTTP
-         SPNEGO specification.
-         </description>
-    </property>
+  <property>
+    <name>dfs.webhdfs.oauth2.enabled</name>
+    <value>true</value>
+  </property>
 
-    <property>
-         <name>dfs.web.authentication.kerberos.keytab</name>
-         <value>/opt/hadoop/etc/hadoop/keytabs/spnego.keytab</value>
-         <description>The Kerberos keytab file with the credentials for the HTTP
-         Kerberos principal used by Hadoop-Auth in the HTTP endpoint.
-         </description>
-    </property>
+     <property>
+          <name>dfs.web.authentication.kerberos.principal</name>
+          <value>HTTP/_HOST@DEITOS.NETWORK</value>
+          <description> The HTTP Kerberos principal used by Hadoop-Auth in the HTTP endpoint.
+          The HTTP Kerberos principal MUST start with 'HTTP/' per Kerberos HTTP
+          SPNEGO specification.
+          </description>
+     </property>
+
+     <property>
+          <name>dfs.web.authentication.kerberos.keytab</name>
+          <value>/opt/hadoop/etc/hadoop/keytabs/nn.keytab</value>
+          <description>The Kerberos keytab file with the credentials for the HTTP
+          Kerberos principal used by Hadoop-Auth in the HTTP endpoint.
+          </description>
+     </property>
 
     <property>
          <name>dfs.datanode.kerberos.principal</name>
@@ -179,10 +188,10 @@
      </property>
 
 
-     <property>
+     <!-- <property>
          <name>hadoop.user.group.static.mapping.overrides</name>
          <value>ramon=global;deitos=global</value>
-     </property>
+     </property> -->
 
      <property>
          <name>dfs.permissions.enabled</name>
@@ -244,5 +253,6 @@
          <name>dfs.client.https.need-auth</name>
          <value>false</value>
      </property>
+
 
 </configuration>

@@ -16,12 +16,14 @@ kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "addprinc -randkey nn/$
 kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "addprinc -randkey hive/$(hostname -f)@$KRB_REALM"
 kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "addprinc -randkey dn/$(hostname -f)@$KRB_REALM"
 kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "addprinc -randkey HTTP/$(hostname -f)@$KRB_REALM"
+kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "addprinc -randkey HTTP/localhost@$KRB_REALM"
+
 kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "addprinc -randkey jhs/$(hostname -f)@$KRB_REALM"
 kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "addprinc -randkey yarn/$(hostname -f)@$KRB_REALM"
 kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "addprinc -randkey rm/$(hostname -f)@$KRB_REALM"
 kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "addprinc -randkey nm/$(hostname -f)@$KRB_REALM"
 
-kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "xst -k $HOME/nn.keytab nn/$(hostname -f) HTTP/$(hostname -f) hive/$(hostname -f) "
+kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "xst -k $HOME/nn.keytab nn/$(hostname -f) HTTP/$(hostname -f) hive/$(hostname -f) HTTP/localhost"
 kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "xst -k $HOME/dn.keytab dn/$(hostname -f)"
 kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "xst -k $HOME/spnego.keytab HTTP/$(hostname -f)"
 kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "xst -k $HOME/jhs.keytab jhs/$(hostname -f)"
@@ -59,7 +61,7 @@ until kinit -kt $KEYTAB_DIR/rm.keytab rm/$(hostname -f)@$KRB_REALM; do sleep 2; 
 until kinit -kt $KEYTAB_DIR/nm.keytab nm/$(hostname -f)@$KRB_REALM; do sleep 2; done 
 
 # kdestroy
-keytool -genkey -alias $(hostname -f) -keyalg rsa -keysize 1024 -dname "CN=$(hostname -f)" -keypass changeme -keystore $KEYTAB_DIR/keystore.jks -storepass changeme
+keytool -genkey -alias $(hostname -f) -keyalg rsa  -dname "CN=$(hostname -f)" -keypass changeme -keystore $KEYTAB_DIR/keystore.jks -storepass changeme
 
 chmod 700 $KEYTAB_DIR/keystore.jks
 chown jovyan $KEYTAB_DIR/keystore.jks

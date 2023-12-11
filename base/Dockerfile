@@ -17,7 +17,8 @@ RUN apt-get -qq update  \
       libkrb5-3 \
       iputils-ping \
       net-tools \
-      jsvc 
+      jsvc \
+      ldap-utils 
 #  && rm -rf /var/lib/apt/lists/*
 
 ARG USERNAME=jovyan
@@ -106,6 +107,7 @@ COPY --chown=$USERNAME:$GROUPNAME conf/yarn-site.xml $HADOOP_CONF_DIR/
 COPY --chown=$USERNAME:$GROUPNAME conf/mapred-site.xml $HADOOP_CONF_DIR/
 COPY --chown=$USERNAME:$GROUPNAME conf/ssl-server.xml $HADOOP_CONF_DIR/
 COPY --chown=$USERNAME:$GROUPNAME conf/ssl-client.xml $HADOOP_CONF_DIR/
+COPY --chown=$USERNAME:$GROUPNAME conf/kms.xml $HADOOP_CONF_DIR/
 
 COPY --chown=$USERNAME:$GROUPNAME conf/workers $HADOOP_CONF_DIR/
 COPY --chown=$USERNAME:$GROUPNAME conf/spark-defaults.conf $SPARK_CONF_DIR/

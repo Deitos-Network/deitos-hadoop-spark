@@ -1,6 +1,7 @@
 version: "3"
 
 services:
+
   metastore:
     image: postgres:11
     hostname: metastore.deitos.network
@@ -23,6 +24,7 @@ services:
       - "worker1.deitos.network:172.28.1.3"
       - "worker2.deitos.network:172.28.1.4"
       - "history.deitos.network:172.28.1.5"
+
   kdc:
     image: sequenceiq/kerberos
     hostname: kdc.deitos.network
@@ -34,8 +36,13 @@ services:
       - "/dev/urandom:/dev/random"
       - "/etc/localtime:/etc/localtime:ro"
     extra_hosts:
+      - "metastore.deitos.network:172.28.1.1"      
       - "master.deitos.network:172.28.1.2"
-      - "metastore.deitos.network:172.28.1.1"
+      - "worker1.deitos.network:172.28.1.3"
+      - "worker2.deitos.network:172.28.1.4"
+      - "history.deitos.network:172.28.1.5"
+      - "jupyter.deitos.network:172.28.1.6"      
+      - "kdc.deitos.network:172.28.1.7"
     networks:
       deitosnet:
         ipv4_address: 172.28.1.7
@@ -81,7 +88,7 @@ services:
       - "metastore.deitos.network:172.28.1.1"      
       - "worker1.deitos.network:172.28.1.3"
       - "worker2.deitos.network:172.28.1.4"
-      - "history.deitos.network:172.28.1.5"
+      - "history.deitos.network:172.28.1.5"      
   worker1:
     image: deitos-hadoop-worker
     hostname: worker1.deitos.network
@@ -156,6 +163,7 @@ services:
       - "master.deitos.network:172.28.1.2"
       - "worker1.deitos.network:172.28.1.3"
       - "history.deitos.network:172.28.1.5"
+
   history:
     image: deitos-hadoop-history
     hostname: history.deitos.network
@@ -188,6 +196,7 @@ services:
       - "master.deitos.network:172.28.1.2"
       - "worker1.deitos.network:172.28.1.3"
       - "worker2.deitos.network:172.28.1.4"
+
   jupyter:
     image: deitos-hadoop-jupyter
     hostname: jupyter.deitos.network

@@ -1,0 +1,14 @@
+<configuration>
+    <property>
+        <name>hadoop.kms.authentication.type</name>
+        <value>kerberos</value>
+    </property>
+    <property>
+        <name>hadoop.kms.keytab.file</name>
+        <value>/opt/hadoop/etc/hadoop/keytabs/nn.keytab</value>
+    </property>
+    <property>
+        <name>hadoop.kms.principal</name>
+        <value>HTTP/_HOST@DEITOS.NETWORK</value>
+    </property>
+</configuration>

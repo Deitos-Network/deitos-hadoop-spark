@@ -46,7 +46,7 @@ COPY --from=base  /opt/hive /opt/hive
 ENV HIVE_HOME=/opt/hive
 ENV HIVE_CONF_DIR=$HIVE_HOME/conf
 
-ENV KRB5CCNAME=/tmp/krb5cc
+# ENV KRB5CCNAME=/tmp/krb5cc
 
 ENV PATH=$HIVE_HOME/sbin:$HIVE_HOME/bin:$PATH
 

@@ -291,3 +291,52 @@ kinit -kt /opt/hadoop/etc/hadoop/keytabs/mapred.keytab mapred/master@DEITOS.NETW
 kinit -kt /opt/hadoop/etc/hadoop/keytabs/mapred.keytab mapred/worker1@DEITOS.NETWORK
 kinit -kt /opt/hadoop/etc/hadoop/keytabs/mapred.keytab mapred/worker2@DEITOS.NETWORK
 kinit -kt /opt/hadoop/etc/hadoop/keytabs/mapred.keytab mapred/history@DEITOS.NETWORK
+
+-----------------------------------------------------------------------------------
+
+kadmin -p admin/admin -w admin -q "addprinc -randkey reimon"
+kadmin -p admin/admin -w admin -q "xst -k $HOME/current.keytab reimon"
+
+kinit -kt $HOME/current.keytab reimon
+
+docker image prune -a
+
+ldap 
+https://localhost:20443
+cn=admin,dc=deitos,dc=network
+admin
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+# kadmin -p admin/admin -w admin -q "addprinc -randkey ramon"
+kadmin -p admin/admin -w admin -q "xst -k $HOME/current.keytab ramon"
+
+kinit -kt $HOME/current.keytab ramon
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+kinit -kt ~/current.keytab ramon && {
+  token=`curl -s --insecure --negotiate -u : "https://master.deitos.network:50470/webhdfs/v1/?op=GETDELEGATIONTOKEN"`
+  token=`echo $token | grep -Po 'urlString":"\K[^"]*'`
+  kdestroy
+  curl -s --insecure  "https://master.deitos.network:50470/webhdfs/v1/data/ramon?delegation=${token}&op=LISTSTATUS"
+}
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+kinit ramon
+
+curl -v -i -k --negotiate -u : "https://master.deitos.network:50470/webhdfs/v1/?op=GETDELEGATIONTOKEN"
+
+curl -v -i -k "https://master.deitos.network:50470/webhdfs/v1/?delegation=HgAFcmFtb24FcmFtb24AigGMV9Tl74oBjHvhae85VBQqR2NclnfeiAO9HJ_FQqHDW5E_RBNTV0VCSERGUyBkZWxlZ2F0aW9uDzE3Mi4yOC4xLjI6ODAyMA&op=LISTSTATUS"
+
+curl -v -i -k --negotiate -u : -X PUT "https://master.deitos.network:50470/webhdfs/v1/data/ramon/people.csv?delegation=HgAFcmFtb24FcmFtb24AigGMV9Tl74oBjHvhae85VBQqR2NclnfeiAO9HJ_FQqHDW5E_RBNTV0VCSERGUyBkZWxlZ2F0aW9uDzE3Mi4yOC4xLjI6ODAyMA&op=CREATE"
+
+curl -i -k -X PUT -T /opt/spark/examples/src/main/resources/people.csv "https://worker1.deitos.network:50075/webhdfs/v1/data/ramon/people.csv?op=CREATE&delegation=HgAFcmFtb24FcmFtb24AigGMV9Tl74oBjHvhae85VBQqR2NclnfeiAO9HJ_FQqHDW5E_RBNTV0VCSERGUyBkZWxlZ2F0aW9uDzE3Mi4yOC4xLjI6ODAyMA&namenoderpcaddress=master.deitos.network:8020&createflag=&createparent=true&overwrite=true"
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+spark = SparkSession.builder\
+    .config("spark.sql.warehouse.dir","hdfs://master.deitos.network:9000/data/deitos/hive/warehouse")\
+    .enableHiveSupport()\
+    .getOrCreate()
