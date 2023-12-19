@@ -2,6 +2,14 @@ version: "3"
 
 services:
 
+  llama2:
+    image: deitos-hadoop-llama2
+    networks:
+      deitosnet:
+        ipv4_address: 172.28.1.20
+    ports:
+      - "7860:5000"
+
   metastore:
     image: postgres:11
     hostname: metastore.deitos.network
@@ -88,7 +96,8 @@ services:
       - "metastore.deitos.network:172.28.1.1"      
       - "worker1.deitos.network:172.28.1.3"
       - "worker2.deitos.network:172.28.1.4"
-      - "history.deitos.network:172.28.1.5"      
+      - "history.deitos.network:172.28.1.5" 
+
   worker1:
     image: deitos-hadoop-worker
     hostname: worker1.deitos.network
@@ -126,6 +135,7 @@ services:
       - "master.deitos.network:172.28.1.2"
       - "worker2.deitos.network:172.28.1.4"
       - "history.deitos.network:172.28.1.5"
+
   worker2:
     image: deitos-hadoop-worker
     hostname: worker2.deitos.network

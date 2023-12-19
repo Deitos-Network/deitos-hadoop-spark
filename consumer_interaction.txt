@@ -11,7 +11,7 @@ kinit -kt ~/current.keytab ramon && {
   token=`curl -s --insecure --negotiate -u : "https://master.deitos.network:50470/webhdfs/v1/?op=GETDELEGATIONTOKEN"`
   token=`echo $token | grep -Po 'urlString":"\K[^"]*'`
   kdestroy
-  curl -s --insecure  "https://master.deitos.network:50470/webhdfs/v1/data/ramon?delegation=${token}&op=LISTSTATUS"
+  curl -s -k  "https://master.deitos.network:50470/webhdfs/v1/data/ramon?delegation=${token}&op=LISTSTATUS"
 }
 
 -----------------------------------------------------------------------------------------------------------------------------------------

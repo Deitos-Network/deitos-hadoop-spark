@@ -340,3 +340,10 @@ spark = SparkSession.builder\
     .config("spark.sql.warehouse.dir","hdfs://master.deitos.network:9000/data/deitos/hive/warehouse")\
     .enableHiveSupport()\
     .getOrCreate()
+
+
+curl -X POST -H "Content-Type: application/json" -d '{
+  "system_message": "You are a helpful assistant",
+  "user_message": "Generate a list of 5 funny dog names",
+  "max_tokens": 100
+}' http://127.0.0.1:7860/llama

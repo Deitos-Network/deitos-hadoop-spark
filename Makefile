@@ -4,3 +4,4 @@ build:
 	docker build -t deitos-hadoop-worker ./worker
 	docker build -t deitos-hadoop-history ./history
 	docker build -t deitos-hadoop-jupyter ./jupyter
+	docker build -t deitos-hadoop-llama2 ./llama2	
