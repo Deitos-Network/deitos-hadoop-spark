@@ -8,8 +8,6 @@ RUN git clone https://github.com/Deitos-Network/deitos-node.git
 RUN mv deitos-node /node-template 
 
 WORKDIR /node-template
-# COPY . .
-# RUN cargo build --release
 
 RUN rm -rf /usr/local/rustup /usr/local/cargo && \
     curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain none && \
@@ -37,15 +35,12 @@ RUN useradd -m -u 1000 -U -s /bin/sh -d /node-dev node-dev && \
   # unclutter and minimize the attack surface
   rm -rf /usr/bin /usr/sbin && \
   # check if executable works in this container
-  /usr/local/bin/deitos-node --version
+  /usr/local/bin/deitos-node --version 
+
 
 USER node-dev
 
 EXPOSE 30333 9933 9944 9615
 VOLUME ["/chain-data"]
 
-ENTRYPOINT ["/usr/local/bin/deitos-node"]
-
-# COPY run.sh /app/run.sh
-# RUN chmod a+x /app/run.sh
-# CMD ["/app/run.sh"]
+ENTRYPOINT ["/usr/local/bin/deitos-node","--dev"]
