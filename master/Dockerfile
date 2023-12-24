@@ -34,6 +34,10 @@ VOLUME /opt/hadoop/dfs/name
 #RUN mkdir -p /opt/hadoop/dfs/namesecondary
 #VOLUME /opt/hadoop/dfs/namesecondary
 
+COPY --chown=$USERNAME:$GROUPNAME ldap/ou.ldif /home/jovyan/ou.ldif
+COPY --chown=$USERNAME:$GROUPNAME ldap/group.ldif /home/jovyan/group.ldif
+COPY --chown=$USERNAME:$GROUPNAME ldap/person.ldif /home/jovyan/person.ldif
+
 ENV SPARK_MASTER_ADDRESS=spark://master.deitos.network:7077
 ENV SPARK_LOGS_HDFS_PATH=/var/log/spark
 ENV SPARK_JARS_HDFS_PATH=/spark/jars

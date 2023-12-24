@@ -1,0 +1,9 @@
+dn: uid=ramon,ou=people,dc=deitos,dc=network
+objectClass: inetOrgPerson
+objectClass: posixAccount
+sn: ramon
+cn: ramon
+homeDirectory: /home/nobody
+uid: ramon
+uidNumber: 10000
+gidNumber: 678

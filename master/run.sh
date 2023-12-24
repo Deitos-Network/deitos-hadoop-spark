@@ -62,6 +62,16 @@ until kinit -kt $KEYTAB_DIR/hive.keytab hive/$(hostname -f)@$KRB_REALM; do sleep
 
 echo $(hostname -f)
 
+kadmin -p admin/admin -w admin -q "addprinc -randkey ramon"
+kadmin -p admin/admin -w admin -q "xst -k $HOME/current.keytab ramon"
+kinit -kt $HOME/current.keytab ramon
+
+ldapadd -x  -w admin  -H ldap://ldap.deitos.network:389 -D "cn=admin,dc=deitos,dc=network"  -f $HOME/ou.ldif 
+ldapadd -x  -w admin  -H ldap://ldap.deitos.network:389 -D "cn=admin,dc=deitos,dc=network"  -f $HOME/group.ldif 
+ldapadd -x  -w admin  -H ldap://ldap.deitos.network:389 -D "cn=admin,dc=deitos,dc=network"  -f $HOME/person.ldif 
+
+
+
 # kdestroy
 
 keytool -genkey -alias $(hostname -f) -keyalg rsa -dname "CN=$(hostname -f)" -keypass changeme -keystore $KEYTAB_DIR/keystore.jks -storepass changeme

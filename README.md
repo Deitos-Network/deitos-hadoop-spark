@@ -2,7 +2,7 @@
 
 ## Software
 
-* [Hadoop 3.3.4](https://hadoop.apache.org/)
+* [Hadoop 3.3.6](https://hadoop.apache.org/)
 
 * [Hive 3.1.3](http://hive.apache.org/)
 

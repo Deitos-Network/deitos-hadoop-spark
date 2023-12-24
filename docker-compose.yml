@@ -10,6 +10,17 @@ services:
     ports:
       - "7860:5000"
 
+  deitos:
+    image: deitos-node
+    networks:
+      deitosnet:
+        ipv4_address: 172.28.1.22
+    ports:
+      - "30333:30333"
+      - "9933:9933"
+      - "9944:9944"
+      - "9615:9615"
+
   metastore:
     image: postgres:11
     hostname: metastore.deitos.network

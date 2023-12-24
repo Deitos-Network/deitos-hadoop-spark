@@ -308,7 +308,7 @@ admin
 
 -----------------------------------------------------------------------------------------------------------------------------------------
 
-# kadmin -p admin/admin -w admin -q "addprinc -randkey ramon"
+kadmin -p admin/admin -w admin -q "addprinc -randkey ramon"
 kadmin -p admin/admin -w admin -q "xst -k $HOME/current.keytab ramon"
 
 kinit -kt $HOME/current.keytab ramon
@@ -347,3 +347,15 @@ curl -X POST -H "Content-Type: application/json" -d '{
   "user_message": "Generate a list of 5 funny dog names",
   "max_tokens": 100
 }' http://127.0.0.1:7860/llama
+
+--------------------------------------------
+
+cat ldap/ou.ldif
+cat ldap/group.ldif
+cat ldap/person.ldif
+
+ldapadd -x  -w admin  -H ldap://ldap.deitos.network:389 -D "cn=admin,dc=deitos,dc=network"  -f ou.ldif 
+ldapadd -x  -w admin  -H ldap://ldap.deitos.network:389 -D "cn=admin,dc=deitos,dc=network"  -f group.ldif 
+ldapadd -x  -w admin  -H ldap://ldap.deitos.network:389 -D "cn=admin,dc=deitos,dc=network"  -f people.ldif 
+
+ldapsearch -x -w admin -H ldap://ldap.deitos.network:389 -D "cn=admin,dc=deitos,dc=network" -b "dc=deitos,dc=network" "(objectclass=*)"
