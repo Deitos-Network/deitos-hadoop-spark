@@ -24,6 +24,9 @@ ARG GROUPNAME=jovyan
 ARG UID=1001
 ARG GID=1001
 
+RUN mkdir /home/jovyan/keytabs
+RUN chown jovyan:root /home/jovyan/keytabs
+
 USER $USERNAME
 
 ENV NAMEDIR=/opt/hadoop/dfs/name

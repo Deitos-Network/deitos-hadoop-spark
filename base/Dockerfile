@@ -37,7 +37,7 @@ ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 
 # Hadoop
 ARG HADOOP_VERSION=3.3.6
-ARG HADOOP_URL=https://www.apache.org/dist/hadoop/common/hadoop-$HADOOP_VERSION/hadoop-$HADOOP_VERSION.tar.gz
+ARG HADOOP_URL=https://downloads.apache.org/hadoop/common/hadoop-$HADOOP_VERSION/hadoop-$HADOOP_VERSION.tar.gz
 ENV HADOOP_HOME=/opt/hadoop
 
 RUN set -x \

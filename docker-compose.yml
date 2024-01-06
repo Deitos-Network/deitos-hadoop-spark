@@ -93,8 +93,11 @@ services:
       - "8033:8033" 
       - "8080:8080"
       - "8088:8088"
+      - "9600:9600"
+      - "9083:9083"
       - "50470:50470"
     volumes:
+      # - keytabs:/home/jovyan/keytabs
       - namenode:/opt/hadoop/dfs/name
       - "./config/krb5.conf:/etc/krb5.conf"
       - "/etc/localtime:/etc/localtime:ro"      
@@ -221,11 +224,19 @@ services:
   jupyter:
     image: deitos-hadoop-jupyter
     hostname: jupyter.deitos.network
+    environment:
+      ENV KERBEROS_ADMIN: admin/admin
+      ENV KERBEROS_ADMIN_PASSWORD: admin
+      KERBEROS_ROOT_USER_PASSWORD: password
+      REALM: DEITOS.NETWORK
+      DOMAIN_REALM: deitos.network
+      FQDN: master.deitos.network 
     depends_on:
       - master
     ports:
       - "8888:8888"
     volumes:
+      # - keytabs:/home/jovyan/keytabs
       - ./jupyter:/home/jupyter
       - "./config/krb5.conf:/etc/krb5.conf"
       - "/etc/localtime:/etc/localtime:ro"      

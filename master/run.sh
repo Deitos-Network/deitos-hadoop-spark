@@ -62,17 +62,13 @@ until kinit -kt $KEYTAB_DIR/hive.keytab hive/$(hostname -f)@$KRB_REALM; do sleep
 
 echo $(hostname -f)
 
-kadmin -p admin/admin -w admin -q "addprinc -randkey ramon"
-kadmin -p admin/admin -w admin -q "xst -k $HOME/current.keytab ramon"
-kinit -kt $HOME/current.keytab ramon
+kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "addprinc -randkey ramon/$(hostname -f)@$KRB_REALM"
+kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "xst -k /home/jovyan/keytabs/current-master.keytab ramon/$(hostname -f)@$KRB_REALM HTTP/localhost"
+kinit -kt /home/jovyan/keytabs/current-master.keytab ramon/$(hostname -f)@$KRB_REALM
 
 ldapadd -x  -w admin  -H ldap://ldap.deitos.network:389 -D "cn=admin,dc=deitos,dc=network"  -f $HOME/ou.ldif 
 ldapadd -x  -w admin  -H ldap://ldap.deitos.network:389 -D "cn=admin,dc=deitos,dc=network"  -f $HOME/group.ldif 
 ldapadd -x  -w admin  -H ldap://ldap.deitos.network:389 -D "cn=admin,dc=deitos,dc=network"  -f $HOME/person.ldif 
-
-
-
-# kdestroy
 
 keytool -genkey -alias $(hostname -f) -keyalg rsa -dname "CN=$(hostname -f)" -keypass changeme -keystore $KEYTAB_DIR/keystore.jks -storepass changeme
 
@@ -86,14 +82,12 @@ fi
 
 echo "Starting Hadoop name node..."
 hdfs --daemon start namenode
-# hdfs namenode
 
 #echo "Starting Hadoop secondary name node..."
 #hdfs --daemon start secondarynamenode
 
 echo "Starting Hadoop resource manager..."
 yarn --daemon start resourcemanager
-# yarn resourcemanager
 
 if [ ! -f "$NAMEDIR"/initialized ]; then
   echo "Configuring Hive..."
@@ -103,11 +97,11 @@ if [ ! -f "$NAMEDIR"/initialized ]; then
   touch "$NAMEDIR"/initialized
 fi
 
-# echo "Starting Hive Metastore..."
-# hive --service metastore &
+echo "Starting Hive Metastore..."
+hive --service metastore &
 
-# echo "Starting Hive server2..."
-# hiveserver2 &
+echo "Starting Hive server2..."
+hiveserver2 &
 
 if ! hdfs dfs -test -d /tmp
 then
@@ -126,10 +120,15 @@ then
   hdfs dfs -put "$SPARK_HOME"/jars/* "$SPARK_JARS_HDFS_PATH"/
 fi
 
-echo "Starting Hadoop KMS Service ..."
-hadoop --daemon start kms
-# hdfs namenode
+hdfs dfs -chown -R  root:users  /
+hdfs dfs -chmod -R 775 /user
+hdfs dfs -chmod -R 775 /var
+hdfs dfs -mkdir /data
+hdfs dfs -mkdir /data/ramon
+hdfs dfs -chown -R ramon:root /data/ramon
 
+# echo "Starting Hadoop KMS Service ..."
+# hadoop --daemon start kms   
 
 echo "Starting Spark master node..."
 spark-class org.apache.spark.deploy.master.Master --ip "$SPARK_MASTER_HOST"

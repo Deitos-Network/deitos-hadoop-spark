@@ -22,6 +22,12 @@ RUN apt-get -qq update  \
 
 ARG USERNAME=jovyan
 
+COPY run.sh /home/jovyan/run.sh
+RUN sudo chmod 755 /home/jovyan/run.sh
+
+RUN mkdir /home/jovyan/keytabs
+RUN chown jovyan:root /home/jovyan/keytabs
+
 USER $USERNAME
 
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
@@ -57,3 +63,7 @@ RUN pip install --no-cache-dir \
     findspark 
 
 COPY notebook /home/jovyan/work
+
+COPY test /home/jovyan/test
+
+CMD ["/home/jovyan/run.sh"]
