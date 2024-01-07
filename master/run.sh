@@ -89,6 +89,8 @@ hdfs --daemon start namenode
 echo "Starting Hadoop resource manager..."
 yarn --daemon start resourcemanager
 
+sleep 10
+
 if [ ! -f "$NAMEDIR"/initialized ]; then
   echo "Configuring Hive..."
   until kinit -kt $KEYTAB_DIR/hive.keytab hive/$(hostname -f)@$KRB_REALM; do sleep 2; done 
@@ -102,6 +104,8 @@ hive --service metastore &
 
 echo "Starting Hive server2..."
 hiveserver2 &
+
+sleep 5
 
 if ! hdfs dfs -test -d /tmp
 then

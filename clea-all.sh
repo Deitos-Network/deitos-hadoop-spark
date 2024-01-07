@@ -1,0 +1,3 @@
+docker rm deitos-hadoop-spark_deitos-client_1 deitos-hadoop-spark_jupyter_1 deitos-hadoop-spark_history_1 deitos-hadoop-spark_worker1_1 deitos-hadoop-spark_worker2_1 deitos-hadoop-spark_master_1 deitos-hadoop-spark_ldap-console_1 deitos-hadoop-spark_kdc_1 deitos-hadoop-spark_metastore_1 deitos-hadoop-spark_deitos_1  deitos-hadoop-spark_llama2_1  deitos-hadoop-spark_ldap_1
+docker image rm deitos-hadoop-worker deitos-hadoop-master deitos-client deitos-hadoop-jupyter deitos-node deitos-hadoop-llama2  deitos-hadoop-history deitos-hadoop-base
+docker volume rm deitos-hadoop-spark_namenode deitos-hadoop-spark_datanode1 deitos-hadoop-spark_datanode2 deitos-hadoop-spark_keytabs deitos-hadoop-spark_metastore deitos-hadoop-spark_namesecondary
