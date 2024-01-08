@@ -1,9 +1,9 @@
 build:
-	docker build -t deitos-hadoop-base ./base
-	docker build -t deitos-hadoop-master ./master
-	docker build -t deitos-hadoop-worker ./worker
-	docker build -t deitos-hadoop-history ./history
-	docker build -t deitos-hadoop-jupyter ./jupyter
-	docker build -t deitos-hadoop-llama2 ./llama2	
-	docker build -t deitos-node ./substrate	
-	docker build -t deitos-client ./deitos-client				
+	docker build -t deitos-base-image ./base
+	docker build -t deitos-master-image ./master
+	docker build -t deitos-worker-image ./worker
+	docker build -t deitos-history-image ./history
+	docker build -t deitos-jupyter-image ./jupyter
+	docker build -t deitos-llama2-image ./llama2	
+	docker build -t deitos-node-image ./substrate	
+	docker build -t deitos-client-image ./deitos-client				

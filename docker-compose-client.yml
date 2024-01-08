@@ -3,7 +3,8 @@ version: "3"
 services:
 
   deitos-client:
-    image: deitos-client
+    image: deitos-client-image
+    container_name: deitos-client
     hostname: client.deitos.network
     environment:
       ENV KERBEROS_ADMIN: admin/admin

@@ -1,4 +1,4 @@
-# Tooling for Deitos Network - Hadoop / Yarn / Spark / Jupyter / Llama2
+# Deitos Network for Infraestructure Provider
 
 ## Software Used
 
@@ -16,22 +16,32 @@ To start the services, run:
 make
 ./start-ip.sh
 ```
+To begin the work, it is necessary to check that all services are up, to check it execute the following actions.
+
+1. Enter into master node using the command in your bash session: 
+```
+docker exec -it deitos-master bash
+```
+2. Once inside, execute the following command:
+```
+hdfs dfsadmin -report 
+```
+You should get a output similar to the next:
+![HDFS Admin Report](hdfs-report.png)
+
+It is possible that the synchronization of the hadoop cluster may take some time when starting the docker container. Please be patient.
 
 ## Checking Hadoop Services (HDFS / YARN / History)
 
 ResourceManager: http://localhost:8088
-
 NameNode: https://localhost:50470
-
 HistoryServer: http://localhost:19888
 
 ## Checking Spark Services (Master / Slaves)
 master: http://localhost:8080
 
-
 ## Checking Jupyter Notebook
 URL: http://localhost:8888
-
 example: [jupyter/notebook/pyspark.ipynb](http://jupyter.deitos.network:8888/notebooks/pyspark.ipynb)
 
 
@@ -46,21 +56,21 @@ To start the services, run:
 
 Enter into deitos-client node using the command in your bash session: 
 ```
-docker exec -it deitos-hadoop-spark_deitos-client_1 bash
+docker exec -it deitos-client bash
 ```
 
 To test the access to the services:
 ```
 # Autheticate User
-kinit -kt /home/jovyan/keytabs/current-jupyter.keytab ramon/$(hostname -f)@DEITOS.NETWORK
+kinit -kt /home/jovyan/keytabs/current-jupyter.keytab test_user/$(hostname -f)@DEITOS.NETWORK
 
 # Make ls to HDFS Filesystem
-hdfs dfs -ls /data/ramon
+hdfs dfs -ls /data/test_user
 ```
 
 To Upload File to the HDFS cluster using command-line, run:
 ```
-hdfs dfs -put test/test.txt /data/ramon
+hdfs dfs -put test/test.txt /data/test_user
 ```
 
 Show results of Execution:
@@ -70,35 +80,35 @@ Show results of Execution:
 
 Enter into deitos-client node using the command in your bash session: 
 ```
-docker exec -it deitos-hadoop-spark_deitos-client_1 bash
+docker exec -it deitos-client bash
 ```
 
 To Upload File to the HDFS cluster using webHDFS API, execute:
 ```
 # Autheticate User
-kinit -kt /home/jovyan/keytabs/current-jupyter.keytab ramon/$(hostname -f)@DEITOS.NETWORK
+kinit -kt /home/jovyan/keytabs/current-jupyter.keytab test_user/$(hostname -f)@DEITOS.NETWORK
 
 # Get Delegation Token
-curl -v -i -k --negotiate -u : "https://master.deitos.network:50470/webhdfs/v1/data/ramon?op=GETDELEGATIONTOKEN"
+curl -v -i -k --negotiate -u : "https://master.deitos.network:50470/webhdfs/v1/data/test_user?op=GETDELEGATIONTOKEN"
 
 
 # List Directory
 curl -v -i -k "https://master.deitos.network:50470/webhdfs/v1/?delegation=<token>&op=LISTSTATUS"
 
 # Define Upload Operation to API - The Response is a Redirect Address to Execute the final Operation
-curl -v -i -k --negotiate -u : -X PUT "https://master.deitos.network:50470/webhdfs/v1/data/ramon/test.txt?delegation=<token>&op=CREATE"
+curl -v -i -k --negotiate -u : -X PUT "https://master.deitos.network:50470/webhdfs/v1/data/test_user/test.txt?delegation=<token>&op=CREATE"
 
 # Upload File to the API
-curl -i -k -X PUT -T test/test.txt "https://worker1.deitos.network:50075/webhdfs/v1/data/ramon/test.txt?op=CREATE&delegation=<token>&namenoderpcaddress=master.deitos.network:8020&createflag=&createparent=true&overwrite=true"
+curl -i -k -X PUT -T test/test.txt "https://worker1.deitos.network:50075/webhdfs/v1/data/test_user/test.txt?op=CREATE&delegation=<token>&namenoderpcaddress=master.deitos.network:8020&createflag=&createparent=true&overwrite=true"
 ```
 
 ## Testing Services Hadoop/Spark/Hive from Jupyter Notebook
 
 Access the Service using the Internet Browser and Open the Notebook named pyspark.ipnb
 
-http://localhost:8889/
+http://localhost:8889/notebooks/pyspark.ipynb
 
-Execute the instructions to tests functionalities
+Execute the each instructions to tests functionalities (The Script show some commons functions used when work with Hadoop/Hive/Spark)
 
 ![Jupyter Notebook](jupyter-notebook.png)
 

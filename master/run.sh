@@ -62,9 +62,9 @@ until kinit -kt $KEYTAB_DIR/hive.keytab hive/$(hostname -f)@$KRB_REALM; do sleep
 
 echo $(hostname -f)
 
-kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "addprinc -randkey ramon/$(hostname -f)@$KRB_REALM"
-kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "xst -k /home/jovyan/keytabs/current-master.keytab ramon/$(hostname -f)@$KRB_REALM HTTP/localhost"
-kinit -kt /home/jovyan/keytabs/current-master.keytab ramon/$(hostname -f)@$KRB_REALM
+kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "addprinc -randkey test_user/$(hostname -f)@$KRB_REALM"
+kadmin -p $KERBEROS_ADMIN -w $KERBEROS_ADMIN_PASSWORD -q "xst -k /home/jovyan/keytabs/current-master.keytab test_user/$(hostname -f)@$KRB_REALM HTTP/localhost"
+kinit -kt /home/jovyan/keytabs/current-master.keytab test_user/$(hostname -f)@$KRB_REALM
 
 ldapadd -x  -w admin  -H ldap://ldap.deitos.network:389 -D "cn=admin,dc=deitos,dc=network"  -f $HOME/ou.ldif 
 ldapadd -x  -w admin  -H ldap://ldap.deitos.network:389 -D "cn=admin,dc=deitos,dc=network"  -f $HOME/group.ldif 
@@ -128,8 +128,8 @@ hdfs dfs -chown -R  root:users  /
 hdfs dfs -chmod -R 775 /user
 hdfs dfs -chmod -R 775 /var
 hdfs dfs -mkdir /data
-hdfs dfs -mkdir /data/ramon
-hdfs dfs -chown -R ramon:root /data/ramon
+hdfs dfs -mkdir /data/test_user
+hdfs dfs -chown -R test_user:root /data/test_user
 
 # echo "Starting Hadoop KMS Service ..."
 # hadoop --daemon start kms   

@@ -1,4 +1,4 @@
-FROM deitos-hadoop-base
+FROM deitos-base-image
 
 USER root
 

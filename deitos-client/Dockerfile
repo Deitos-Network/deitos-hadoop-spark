@@ -1,5 +1,5 @@
 ARG PYTHON_VERSION=3.10
-FROM deitos-hadoop-base AS base
+FROM deitos-base-image AS base
 FROM jupyter/minimal-notebook:python-3.10.4
 
 USER root

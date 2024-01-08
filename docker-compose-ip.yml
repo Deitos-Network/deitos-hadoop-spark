@@ -3,7 +3,8 @@ version: "3"
 services:
 
   llama2:
-    image: deitos-hadoop-llama2
+    image: deitos-llama2-image
+    container_name: deitos-llama2
     hostname: llama2.deitos.network    
     networks:
       deitosnet:
@@ -12,7 +13,8 @@ services:
       - "7860:5000"
 
   deitos:
-    image: deitos-node
+    image: deitos-node-image
+    container_name: deitos-node
     networks:
       deitosnet:
         ipv4_address: 172.28.1.22
@@ -24,6 +26,7 @@ services:
 
   metastore:
     image: postgres:11
+    container_name: deitos-metastore
     hostname: metastore.deitos.network
     environment:
       POSTGRES_PASSWORD: jupyter
@@ -47,6 +50,7 @@ services:
 
   kdc:
     image: sequenceiq/kerberos
+    container_name: deitos-kdc    
     hostname: kdc.deitos.network
     environment:
       REALM: DEITOS.NETWORK
@@ -68,7 +72,8 @@ services:
         ipv4_address: 172.28.1.7
 
   master:
-    image: deitos-hadoop-master
+    image: deitos-master-image
+    container_name: deitos-master    
     hostname: master.deitos.network
     depends_on:
       - kdc
@@ -114,7 +119,8 @@ services:
       - "history.deitos.network:172.28.1.5" 
 
   worker1:
-    image: deitos-hadoop-worker
+    image: deitos-worker-image
+    container_name: deitos-worker1    
     hostname: worker1.deitos.network
     depends_on:
       - master
@@ -152,7 +158,8 @@ services:
       - "history.deitos.network:172.28.1.5"
 
   worker2:
-    image: deitos-hadoop-worker
+    image: deitos-worker-image
+    container_name: deitos-worker2
     hostname: worker2.deitos.network
     depends_on:
       - master
@@ -190,7 +197,8 @@ services:
       - "history.deitos.network:172.28.1.5"
 
   history:
-    image: deitos-hadoop-history
+    image: deitos-history-image
+    container_name: deitos-history
     hostname: history.deitos.network
     depends_on:
       - master
@@ -223,7 +231,8 @@ services:
       - "worker2.deitos.network:172.28.1.4"
 
   jupyter:
-    image: deitos-hadoop-jupyter
+    image: deitos-jupyter-image
+    container_name: deitos-jupyter
     hostname: jupyter.deitos.network
     environment:
       ENV KERBEROS_ADMIN: admin/admin
@@ -254,9 +263,8 @@ services:
 
   ldap:
     image: osixia/openldap:latest
+    container_name: deitos-ldap
     hostname: ldap.deitos.network
-    # depends_on:
-    #   - master
     ports:
       - "389:389"
     environment:
@@ -270,6 +278,7 @@ services:
 
   ldap-console:
     image: osixia/phpldapadmin:latest
+    container_name: deitos-ldap-console
     hostname: ldap-console.deitos.network
     depends_on:
       - ldap
@@ -290,7 +299,6 @@ volumes:
   datanode1:
   datanode2:
   metastore:
-  keytabs:
 
 networks:
   deitosnet:
