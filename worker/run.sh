@@ -1,7 +1,5 @@
 #!/bin/bash
 
-until sleep 10; do sleep 10; done
-
 export KERBEROS_ADMIN=admin/admin
 export KERBEROS_ADMIN_PASSWORD=admin
 export KERBEROS_ROOT_USER_PASSWORD=password
@@ -60,13 +58,13 @@ until kinit -kt $KEYTAB_DIR/yarn.keytab yarn/$(hostname -f)@$KRB_REALM; do sleep
 until kinit -kt $KEYTAB_DIR/rm.keytab rm/$(hostname -f)@$KRB_REALM; do sleep 2; done 
 until kinit -kt $KEYTAB_DIR/nm.keytab nm/$(hostname -f)@$KRB_REALM; do sleep 2; done 
 
+
+
 # kdestroy
 keytool -genkey -alias $(hostname -f) -keyalg rsa  -dname "CN=$(hostname -f)" -keypass changeme -keystore $KEYTAB_DIR/keystore.jks -storepass changeme
 
 chmod 700 $KEYTAB_DIR/keystore.jks
 chown jovyan $KEYTAB_DIR/keystore.jks
-
-sleep 10
 
 echo "Starting Hadoop data node..."
 hdfs --daemon start datanode
@@ -76,9 +74,7 @@ echo "Starting Hadoop node manager..."
 yarn --daemon start nodemanager
 # yarn nodemanager
 
-sleep 5
-
 echo "Starting Spark slave node..."
-spark-class org.apache.spark.deploy.worker.Worker "spark://master.deitos.network:7077"
+spark-class org.apache.spark.deploy.worker.Worker "spark://master.deitos.network:7077" 
 
 while true; do sleep 1000; done

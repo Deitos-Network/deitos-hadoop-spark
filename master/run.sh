@@ -89,7 +89,9 @@ hdfs --daemon start namenode
 echo "Starting Hadoop resource manager..."
 yarn --daemon start resourcemanager
 
-sleep 10
+echo "Starting Spark master node..."
+# spark-class org.apache.spark.deploy.master.Master --ip "$SPARK_MASTER_HOST" &
+spark-class org.apache.spark.deploy.master.Master --ip "$SPARK_MASTER_HOST"  &
 
 if [ ! -f "$NAMEDIR"/initialized ]; then
   echo "Configuring Hive..."
@@ -98,14 +100,6 @@ if [ ! -f "$NAMEDIR"/initialized ]; then
   schematool -dbType postgres -initSchema
   touch "$NAMEDIR"/initialized
 fi
-
-echo "Starting Hive Metastore..."
-hive --service metastore &
-
-echo "Starting Hive server2..."
-hiveserver2 &
-
-sleep 5
 
 if ! hdfs dfs -test -d /tmp
 then
@@ -124,17 +118,26 @@ then
   hdfs dfs -put "$SPARK_HOME"/jars/* "$SPARK_JARS_HDFS_PATH"/
 fi
 
+echo "Setting Permissions for Users"
 hdfs dfs -chown -R  root:users  /
 hdfs dfs -chmod -R 775 /user
 hdfs dfs -chmod -R 775 /var
-hdfs dfs -mkdir /data
-hdfs dfs -mkdir /data/test_user
-hdfs dfs -chown -R test_user:root /data/test_user
+
+if ! hdfs dfs -test -d "/data"
+then
+  echo "Generating HOME Path for Users: /data"
+  hdfs dfs -mkdir /data
+  hdfs dfs -mkdir /data/test_user
+  hdfs dfs -chown -R test_user:root /data/test_user
+fi
+
+echo "Starting Hive Metastore..."
+hive --service metastore &
+
+echo "Starting Hive server2..."
+hiveserver2 &
 
 # echo "Starting Hadoop KMS Service ..."
 # hadoop --daemon start kms   
-
-echo "Starting Spark master node..."
-spark-class org.apache.spark.deploy.master.Master --ip "$SPARK_MASTER_HOST"
 
 while true; do sleep 1000; done

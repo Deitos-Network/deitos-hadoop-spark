@@ -1,6 +1,4 @@
 #!/bin/bash
-until sleep 10; do sleep 10; done
-
 export KERBEROS_ADMIN=admin/admin
 export KERBEROS_ADMIN_PASSWORD=admin
 export KERBEROS_ROOT_USER_PASSWORD=password
@@ -62,6 +60,8 @@ keytool -genkey -alias $(hostname -f) -keyalg rsa -dname "CN=$(hostname -f)" -ke
 
 chmod 700 $KEYTAB_DIR/keystore.jks
 chown jovyan $KEYTAB_DIR/keystore.jks
+
+sleep 35;
 
 echo "Starting Hadoop history server..."
 mapred --daemon start historyserver 
