@@ -59,7 +59,6 @@ until kinit -kt $KEYTAB_DIR/rm.keytab rm/$(hostname -f)@$KRB_REALM; do sleep 2; 
 until kinit -kt $KEYTAB_DIR/nm.keytab nm/$(hostname -f)@$KRB_REALM; do sleep 2; done 
 
 
-
 # kdestroy
 keytool -genkey -alias $(hostname -f) -keyalg rsa  -dname "CN=$(hostname -f)" -keypass changeme -keystore $KEYTAB_DIR/keystore.jks -storepass changeme
 
