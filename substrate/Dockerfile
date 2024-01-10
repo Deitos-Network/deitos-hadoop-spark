@@ -35,7 +35,8 @@ RUN apt-get -qq update  \
 
 WORKDIR /node-template
 
-RUN wget --no-check-certificate https://github.com/Deitos-Network/deitos-node/releases/download/beta-0.1/deitos-node  -O deitos-node
+# RUN wget --no-check-certificate https://github.com/Deitos-Network/deitos-node/releases/download/beta-0.1/deitos-node  -O deitos-node
+RUN wget --no-check-certificate https://github.com/Deitos-Network/deitos-node/releases/download/v0.0.1/deitos-node  -O deitos-node
 RUN chmod 755 deitos-node
 RUN mv /node-template/deitos-node /usr/local/bin
 
