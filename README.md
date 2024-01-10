@@ -119,7 +119,8 @@ hdfs dfs -put test/test.txt /data/test_user
 ```
 
 Show results of Execution:
-![Command-line Results](commanline-results.png)
+![Command-line Results](commandline-results.png)
+
 
 ### Testing Services Hadoop using WebHDFS
 
@@ -163,9 +164,11 @@ Execute the each instructions to tests functionalities (The Script show some com
 
 ## Testing Environment Llama2
 
+Among the services configured in the infrastructure provider is a Flask-based application that uses a Llama2-based LLM model to do some very simple tasks, this section shows how to test this service using the curl command.
+
 Enter into deitos-client node using the command in your bash session: 
 ```
-docker exec -it deitos-hadoop-spark_deitos-client_1 bash
+docker exec -it deitos-client bash
 ```
 
 Use curl to test the Llama2 Service
