@@ -1,11 +1,11 @@
-![deitos.logo](deitos.logo.png)
+![deitos.logo](docs/deitos.logo.png)
 ## 🚧🚧 Under Construction 🚧🚧
 
 # Deitos Network for Infraestructure Provider
 
-Deitos incorporates Substrate's blockchain technology to transform the consumption of Big Data services. 
+Deitos incorporates blockchain technology to transform the consumption of Big Data and AI services. 
 
-This project shows how a set of containers can be deployed on the side of an infrastructure provider to start a Deitos Node and a set of Hadoop-based services (Hadoop / Spark / Hive), it also shows the deployment of a Jupyter-based client that can use the services offered by the infrastructure provider.
+This project shows how a set of containers can be deployed on the side of an infrastructure provider to start a [Deitos Node](https://github.com/Deitos-Network/deitos-node) and a set of Hadoop-based services (Hadoop / Spark / Hive), it also shows the deployment of a Jupyter-based client that can use the services offered by the infrastructure provider and Llama v2 for LLM processing.
 
 ## Infrastructure provider services
 
@@ -22,6 +22,10 @@ This Docker instance also provides a Jupyter-based service to test the functiona
 * [Jupyter 3.4.3](https://jupyter.org/)
 * [Llama-2 7B](https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF)
 
+### OS Compatibility and Support
+
+As of the current release, the technology stack for Infrastructure Providers in the is exclusively compatible with Linux distributions. Future updates may expand OS support based on user needs and technological advancements.
+
 
 ### Starting Infraestructure Provider Services
 
@@ -31,14 +35,14 @@ Build de docker images:
 ```
 make
 ```
-![Build Docker Images](build-docker-images.png)
+![Build Docker Images](docs/build-docker-images.png)
 
 
 Start the Docker containers in Infraestructure Provide:
 ```
 ./start-ip.sh
 ```
-![Start Services in Infraestructure Providee](start-services-ip.png)
+![Start Services in Infraestructure Providee](docs/start-services-ip.png)
 
 It is necessary to verify if the services have been started correctly, for this we will enter the node master of the Docker deployment, and verify the status of the data nodes that make up the Hadoop cluster, for this we execute the following command:
 
@@ -51,11 +55,11 @@ docker exec -it deitos-master bash
 hdfs dfsadmin -report 
 ```
 You should get a output similar to the next:
-![HDFS Admin Report](hdfs-report.png)
+![HDFS Admin Report](docs/hdfs-report.png)
 
 In the attached image you can verify that the cluster is composed by  2 datanodes and both are alive, one of them is called worker1.deitos.network.
 
-Please note that the process of starting the hadoop cluster may take some time, depending on the hardware resources of your machine.
+**❗ IMPORTANT: Please note that the process of starting the hadoop cluster may take some time, depending on the hardware resources of your machine. Please wait a couple of minutes until everything gets syncronized.**
 
 ### Checking Other Services
 
@@ -65,18 +69,32 @@ For YARN service status
 
 ResourceManager: http://localhost:8088
 
-![YARN Console](yarn-console.png)
+![YARN Console](docs/yarn-console.png)
 
 master: http://localhost:8080
 
-![SPARK Console](spark-console.png)
+![SPARK Console](docs/spark-console.png)
 
 On the infrastructure provider side, you can access the Jupyter programming interface, with which you can test the use of Spark / Hadoop and Hive through a Notebook example, once validated in the system. 
 
 URL: http://localhost:8888
 example: [jupyter/notebook/pyspark.ipynb](http://localhost:8888/notebooks/pyspark.ipynb)
 
-![Jupyter Main Window](jupyter-main-window.png)
+![Jupyter Main Window](docs/jupyter-main-window.png)
+
+## Deitos Blockchain Node
+
+The [latest release of a Deitos Blockchain Node](https://github.com/Deitos-Network/deitos-node/releases/tag/v0.0.1) is included as part of the IP technology stack.
+
+The Deitos Node can be accessed using PolkadotJS with the following URL:
+
+```
+https://polkadot.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A9944#/explorer
+```
+
+![PolkadotJS](docs/polkadotjs.jpg)
+
+Please Make sure that no other substrate node is running under the default ports like 9944 or 30333.
 
 ## Client services
 
@@ -89,7 +107,7 @@ To start the client services, run the corresponding script command:
 ./start-client.sh
 ```
 
-![Start Services Client](start-services-client.png)
+![Start Services Client](docs/start-services-client.png)
 
 
 ### Testing Services Hadoop using Command-line
@@ -111,7 +129,7 @@ kinit -kt /home/jovyan/keytabs/current-jupyter.keytab test_user/$(hostname -f)@D
 hdfs dfs -ls /data/test_user
 ```
 
-![List HDFS Filesystem](list-hdfs.png)
+![List HDFS Filesystem](docs/list-hdfs.png)
 
 It is possible to upload a sample file to a specific path in the HDFS file system hosted on the client node. We can use the command:
 ```
@@ -119,7 +137,7 @@ hdfs dfs -put test/test.txt /data/test_user
 ```
 
 Show results of Execution:
-![Command-line Results](commandline-results.png)
+![Command-line Results](docs/commandline-results.png)
 
 
 ### Testing Services Hadoop using WebHDFS
@@ -160,7 +178,7 @@ http://localhost:8889/notebooks/pyspark.ipynb
 
 Execute the each instructions to tests functionalities (The Script show some commons functions used when work with Hadoop/Hive/Spark)
 
-![Jupyter Notebook](jupyter-notebook.png)
+![Jupyter Notebook](docs/jupyter-notebook.png)
 
 ## Testing Environment Llama2
 
@@ -181,4 +199,6 @@ curl -X POST -H "Content-Type: application/json" -d '{
 ```
 
 View the results:
-![Llama2 Results](llama2-result.png)
+![Llama2 Results](docs/llama2-result.png)
+
+
