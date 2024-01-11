@@ -1,21 +1,3 @@
-# This is an example build stage for the node template. Here we create the binary in a temporary image.
-
-# This is a base image to build substrate nodes
-#  FROM docker.io/paritytech/ci-linux:production as builder
-
-
-# RUN git clone https://github.com/Deitos-Network/deitos-node.git
-# RUN mv deitos-node /node-template 
-# WORKDIR /node-template
-
-# RUN rm -rf /usr/local/rustup /usr/local/cargo && \
-#     curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain none && \
-#     rustup show && \
-#     cargo build --release
-
-# This is the 2nd stage: a very small image where we copy the binary."
-# FROM docker.io/library/ubuntu:20.04
-
 FROM rust
 
 LABEL description="Multistage Docker image for Substrate Node Template" \
@@ -31,17 +13,17 @@ RUN apt-get -qq update  \
  && DEBIAN_FRONTEND=noninteractive apt-get -qq install --no-install-recommends \
       sudo \
       curl \
-      wget 
+      wget \
+      bash \
+      coreutils \
+      software-properties-common 
 
 WORKDIR /node-template
 
-# RUN wget --no-check-certificate https://github.com/Deitos-Network/deitos-node/releases/download/beta-0.1/deitos-node  -O deitos-node
 RUN wget --no-check-certificate https://github.com/Deitos-Network/deitos-node/releases/download/v0.0.1/deitos-node  -O deitos-node
 RUN chmod 755 deitos-node
 RUN mv /node-template/deitos-node /usr/local/bin
 
-# Copy the node binary.
-# COPY --from=builder /node-template/target/release/deitos-node /usr/local/bin
 
 RUN useradd -m -u 1000 -U -s /bin/sh -d /node-dev node-dev && \
   mkdir -p /chain-data /node-dev/.local/share && \
@@ -58,4 +40,4 @@ USER node-dev
 EXPOSE 30333 9933 9944 9615
 VOLUME ["/chain-data"]
 
-ENTRYPOINT ["/usr/local/bin/deitos-node","--dev"]
+ENTRYPOINT ["/usr/local/bin/deitos-node", "--base-path", "/tmp/alice", "--chain", "local", "--alice", "--port", "30333", "--rpc-port", "9944", "--node-key", "0000000000000000000000000000000000000000000000000000000000000001", "--validator", "--force-authoring", "--unsafe-rpc-external", "--rpc-cors=all"]

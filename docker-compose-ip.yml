@@ -103,7 +103,6 @@ services:
       - "9083:9083"
       - "50470:50470"
     volumes:
-      # - keytabs:/home/jovyan/keytabs
       - namenode:/opt/hadoop/dfs/name
       - "./config/krb5.conf:/etc/krb5.conf"
       - "/etc/localtime:/etc/localtime:ro"      
