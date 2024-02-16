@@ -17,7 +17,7 @@
         <value>/opt/hadoop/dfs/namesecondary</value>
     </property>
 
-    <property>
+    <!-- <property>
          <name>dfs.permissions</name>
          <value>true</value>
          <description> If "true", enable permission checking in
@@ -26,9 +26,9 @@
          unchanged. Switching from one parameter value to the other does
          not change the mode, owner or group of files or
          directories. </description>
-    </property>
+    </property> -->
 
-    <property>
+    <!-- <property>
          <name>dfs.permissions.supergroup</name>
          <value>root</value>
          <description>The name of the group of super-users.</description>
@@ -68,19 +68,19 @@
          <value>nn/_HOST@DEITOS.NETWORK</value>
          <description>Kerberos principal name for the secondary NameNode.
          </description>
-    </property>
+    </property> -->
 
   <property>
     <name>dfs.webhdfs.enabled</name>
     <value>true</value>
   </property>
 
-  <property>
+  <!-- <property>
     <name>dfs.webhdfs.oauth2.enabled</name>
     <value>true</value>
-  </property>
+  </property> -->
 
-     <property>
+     <!-- <property>
           <name>dfs.web.authentication.kerberos.principal</name>
           <value>HTTP/_HOST@DEITOS.NETWORK</value>
           <description> The HTTP Kerberos principal used by Hadoop-Auth in the HTTP endpoint.
@@ -185,22 +185,21 @@
      <property>
          <name>dfs.datanode.data.dir.perm</name>
          <value>700</value>
-     </property>
-
+     </property> -->
 
      <!-- <property>
          <name>hadoop.user.group.static.mapping.overrides</name>
          <value>ramon=global;deitos=global</value>
      </property> -->
 
-     <property>
+     <!-- <property>
          <name>dfs.permissions.enabled</name>
          <value>true</value>
-     </property>     
+     </property>      -->
 
      <!-- NETWORK CONFIGURATION -->
 
-     <property>
+     <!-- <property>
          <name>dfs.datanode.address</name>
          <value>0.0.0.0:50010</value>
      </property>
@@ -252,7 +251,11 @@
      <property>
          <name>dfs.client.https.need-auth</name>
          <value>false</value>
-     </property>
+     </property> -->
 
+     <property>
+          <name>dfs.namenode.http-address</name>
+          <value>0.0.0.0:50070</value>
+     </property>
 
 </configuration>

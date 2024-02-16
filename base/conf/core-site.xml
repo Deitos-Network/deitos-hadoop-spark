@@ -54,7 +54,7 @@
 
 
     <!-- Kerberos -->
-    <property>
+    <!-- <property>
       <name>hadoop.security.authentication</name>
       <value>kerberos</value>
     </property>
@@ -78,14 +78,10 @@
     <property>
       <name>hadoop.http.authentication.kerberos.keytab</name>
       <value>/opt/hadoop/etc/hadoop/keytabs/spnego.keytab</value>
-    </property>
-    <!-- <property>
-      <name>hadoop.http.filter.initializers</name>
-      <value>org.apache.hadoop.security.AuthenticationFilterInitializer</value>
     </property> -->
-    
+    <!-- End Kerberos -->
 
-    <property>
+    <!-- <property>
         <name>hadoop.ssl.keystores.factory.class</name>
         <value>org.apache.hadoop.security.ssl.FileBasedKeyStoresFactory</value>
     </property>
@@ -163,6 +159,6 @@
     <property>
       <name>hadoop.security.group.mapping.ldap.search.group.hierarchy.levels</name>
       <value>5</value>
-    </property>
+    </property> -->
 
 </configuration>

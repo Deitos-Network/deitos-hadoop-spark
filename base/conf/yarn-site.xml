@@ -43,7 +43,7 @@
      <value>100.0</value>
   </property>
 
-  <property>
+  <!-- <property>
      <name>yarn.resourcemanager.principal</name>
      <value>rm/_HOST@DEITOS.NETWORK</value>
   </property>
@@ -62,8 +62,9 @@
        <name>yarn.nodemanager.keytab</name>
        <value>/opt/hadoop/etc/hadoop/keytabs/nm.keytab</value>
   </property>
-   
-    <!-- Resource Management By Node -->
+    -->
+ 
+    <!-- Resource Management By Node --> 
     <property>
         <name>yarn.nodemanager.resource.cpu-vcores</name>
         <value>4</value>
@@ -106,7 +107,7 @@
        <value>root</value>
   </property> -->
    
-  <property>
+  <!-- <property>
        <name>yarn.timeline-service.principal</name>
        <value>yarn/_HOST@DEITOS.NETWORK</value>
   </property>
@@ -134,6 +135,6 @@
   <property>
        <name>yarn.timeline-service.http-authentication.kerberos.keytab</name>
        <value>/opt/hadoop/etc/hadoop/keytabs/yarn.keytab</value>
-  </property>
+  </property> -->
 
 </configuration>

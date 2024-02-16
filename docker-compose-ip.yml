@@ -102,6 +102,7 @@ services:
       - "9600:9600"
       - "9083:9083"
       - "50470:50470"
+      - "50070:50070"
     volumes:
       - namenode:/opt/hadoop/dfs/name
       - "./config/krb5.conf:/etc/krb5.conf"

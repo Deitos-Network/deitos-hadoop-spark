@@ -3,7 +3,8 @@
         <name>mapreduce.framework.name</name>
         <value>yarn</value>
     </property>
-    <property>
+
+    <!-- <property>
         <name>mapreduce.jobhistory.keytab</name>
         <value>/opt/hadoop/etc/hadoop/keytabs/jhs.keytab</value>
     </property> 
@@ -21,14 +22,14 @@
     <property>
          <name>mapreduce.jobhistory.webapp.address</name>
          <value>0.0.0.0:19888</value>
-    </property> 
+    </property>  -->
      
     <!-- <property>
          <name>mapreduce.jobhistory.webapp.https.address</name>
          <value>0.0.0.0:19889</value>
     </property>  -->
      
-    <property>
+    <!-- <property>
          <name>mapreduce.jobhistory.webapp.spnego-keytab-file</name>
          <value>/opt/hadoop/etc/hadoop/keytabs/spnego.keytab</value>
     </property> 
@@ -36,5 +37,6 @@
     <property>
          <name>mapreduce.jobhistory.webapp.spnego-principal</name>
          <value>HTTP/_HOST@DEITOS.NETWORK</value>
-    </property>  
+    </property>   -->
+
 </configuration>
