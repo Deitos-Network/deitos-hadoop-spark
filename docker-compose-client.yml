@@ -10,7 +10,6 @@ services:
       - "8889:8888"
     volumes:
       - ./deitos-client:/home/jupyter
-      - "./config/krb5.conf:/etc/krb5.conf"
       - "/etc/localtime:/etc/localtime:ro"      
     restart: always
     networks:
