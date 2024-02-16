@@ -1,5 +1,5 @@
 ARG PYTHON_VERSION=3.10
-FROM deitos-base-image AS base
+FROM deitos-lite-base-image AS base
 FROM jupyter/minimal-notebook:python-3.10.4
 
 USER root
@@ -15,10 +15,7 @@ RUN apt-get -qq update  \
       python3-venv \
       coreutils \
       iputils-ping \      
-      libc6-dev \
-      krb5-user \
-      libkrb5-dev \
-      libkrb5-3       
+      libc6-dev      
 #  && sudo rm -rf /var/lib/apt/lists/*
 
 ARG USERNAME=jovyan

@@ -1,9 +1,0 @@
-dn: uid=test_user,ou=people,dc=deitos,dc=network
-objectClass: inetOrgPerson
-objectClass: posixAccount
-sn: test_user
-cn: test_user
-homeDirectory: /home/nobody
-uid: test_user
-uidNumber: 10000
-gidNumber: 678

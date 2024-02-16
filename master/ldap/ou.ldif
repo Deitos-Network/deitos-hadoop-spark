@@ -1,9 +1,0 @@
-dn: ou=people,dc=deitos,dc=network
-objectClass: top
-objectClass: organizationalUnit
-ou: people
-
-dn: ou=groups,dc=deitos,dc=network
-objectClass: top
-objectClass: organizationalUnit
-ou: groups

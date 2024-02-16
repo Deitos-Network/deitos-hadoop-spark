@@ -12,13 +12,9 @@ RUN apt-get -qq update  \
       python-is-python3 \
       coreutils \
       libc6-dev \
-      krb5-user \
-      libkrb5-dev \
-      libkrb5-3 \
       iputils-ping \
       net-tools \
-      jsvc \
-      ldap-utils 
+      jsvc 
 #  && rm -rf /var/lib/apt/lists/*
 
 ARG USERNAME=jovyan
@@ -105,9 +101,6 @@ COPY --chown=$USERNAME:$GROUPNAME conf/core-site.xml $HADOOP_CONF_DIR/
 COPY --chown=$USERNAME:$GROUPNAME conf/hdfs-site.xml $HADOOP_CONF_DIR/
 COPY --chown=$USERNAME:$GROUPNAME conf/yarn-site.xml $HADOOP_CONF_DIR/
 COPY --chown=$USERNAME:$GROUPNAME conf/mapred-site.xml $HADOOP_CONF_DIR/
-COPY --chown=$USERNAME:$GROUPNAME conf/ssl-server.xml $HADOOP_CONF_DIR/
-COPY --chown=$USERNAME:$GROUPNAME conf/ssl-client.xml $HADOOP_CONF_DIR/
-COPY --chown=$USERNAME:$GROUPNAME conf/kms.xml $HADOOP_CONF_DIR/
 
 COPY --chown=$USERNAME:$GROUPNAME conf/workers $HADOOP_CONF_DIR/
 COPY --chown=$USERNAME:$GROUPNAME conf/spark-defaults.conf $SPARK_CONF_DIR/

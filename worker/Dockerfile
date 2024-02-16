@@ -1,4 +1,4 @@
-FROM deitos-base-image
+FROM deitos-lite-base-image
 
 ENV DATADIR=/opt/hadoop/dfs/data
 RUN mkdir -p /opt/hadoop/dfs/data

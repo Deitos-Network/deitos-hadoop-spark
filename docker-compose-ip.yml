@@ -2,27 +2,17 @@ version: "3"
 
 services:
 
-  llama2:
-    image: deitos-llama2-image
-    container_name: deitos-llama2
-    hostname: llama2.deitos.network    
-    networks:
-      deitosnet:
-        ipv4_address: 172.28.1.20
-    ports:
-      - "7860:5000"
-
-  deitos:
-    image: deitos-node-image
-    container_name: deitos-node
-    networks:
-      deitosnet:
-        ipv4_address: 172.28.1.22
-    ports:
-      - "30333:30333"
-      - "9933:9933"
-      - "9944:9944"
-      - "9615:9615"
+  # deitos:
+  #   image: deitos-node-image
+  #   container_name: deitos-node
+  #   networks:
+  #     deitosnet:
+  #       ipv4_address: 172.28.1.22
+  #   ports:
+  #     - "30333:30333"
+  #     - "9933:9933"
+  #     - "9944:9944"
+  #     - "9615:9615"
 
   metastore:
     image: postgres:11
@@ -35,61 +25,28 @@ services:
     volumes:
       - metastore:/var/lib/postgresql/data
       - ./ddl/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - "./config/krb5.conf:/etc/krb5.conf"
       - "/etc/localtime:/etc/localtime:ro"
     restart: always
     networks:
       deitosnet:
         ipv4_address: 172.28.1.1
     extra_hosts:
-      - "kdc.deitos.network:172.28.1.7"
       - "master.deitos.network:172.28.1.2"
       - "worker1.deitos.network:172.28.1.3"
       - "worker2.deitos.network:172.28.1.4"
       - "history.deitos.network:172.28.1.5"
-
-  kdc:
-    image: sequenceiq/kerberos
-    container_name: deitos-kdc    
-    hostname: kdc.deitos.network
-    environment:
-      REALM: DEITOS.NETWORK
-      DOMAIN_REALM: deitos.network
-    volumes:
-      - "./config/krb5.conf:/etc/krb5.conf"
-      - "/dev/urandom:/dev/random"
-      - "/etc/localtime:/etc/localtime:ro"
-    extra_hosts:
-      - "metastore.deitos.network:172.28.1.1"      
-      - "master.deitos.network:172.28.1.2"
-      - "worker1.deitos.network:172.28.1.3"
-      - "worker2.deitos.network:172.28.1.4"
-      - "history.deitos.network:172.28.1.5"
-      - "jupyter.deitos.network:172.28.1.6"      
-      - "kdc.deitos.network:172.28.1.7"
-    networks:
-      deitosnet:
-        ipv4_address: 172.28.1.7
 
   master:
-    image: deitos-master-image
+    image: deitos-lite-master-image
     container_name: deitos-master    
     hostname: master.deitos.network
     depends_on:
-      - kdc
       - metastore
     tty: true      
     environment:
       SPARK_MASTER_HOST: 172.28.1.2
       SPARK_LOCAL_IP: 172.28.1.2
       SPARK_LOCAL_HOSTNAME: master.deitos.network
-      ENV KERBEROS_ADMIN: admin/admin
-      ENV KERBEROS_ADMIN_PASSWORD: admin
-      KERBEROS_ROOT_USER_PASSWORD: password
-      REALM: DEITOS.NETWORK
-      DOMAIN_REALM: deitos.network
-      FQDN: master.deitos.network
-      KEYTAB_DIR: /opt/hadoop/etc/hadoop/keytabs
     ports:
       - "7077:7077"
       - "8020:8020"
@@ -105,21 +62,19 @@ services:
       - "50070:50070"
     volumes:
       - namenode:/opt/hadoop/dfs/name
-      - "./config/krb5.conf:/etc/krb5.conf"
       - "/etc/localtime:/etc/localtime:ro"      
     restart: always
     networks:
       deitosnet:
         ipv4_address: 172.28.1.2
     extra_hosts:
-      - "kdc.deitos.network:172.28.1.7"
       - "metastore.deitos.network:172.28.1.1"      
       - "worker1.deitos.network:172.28.1.3"
       - "worker2.deitos.network:172.28.1.4"
       - "history.deitos.network:172.28.1.5" 
 
   worker1:
-    image: deitos-worker-image
+    image: deitos-lite-worker-image
     container_name: deitos-worker1    
     hostname: worker1.deitos.network
     depends_on:
@@ -128,37 +83,29 @@ services:
       SPARK_MASTER_HOST: 172.28.1.2
       SPARK_LOCAL_IP: 172.28.1.3
       SPARK_LOCAL_HOSTNAME: worker1.deitos.network
-      ENV KERBEROS_ADMIN: admin/admin
-      ENV KERBEROS_ADMIN_PASSWORD: admin
-      KERBEROS_ROOT_USER_PASSWORD: password
-      REALM: DEITOS.NETWORK
-      DOMAIN_REALM: deitos.network
-      FQDN: worker1.deitos.network
-      KEYTAB_DIR: /opt/hadoop/etc/hadoop/keytabs
     ports:       
       - "8040:8040"
       - "8042:8042"
       - "8081:8081"
       - "9867:9867"
+      - "9864:9864"
       - "50010:50010"
       - "50075:50075"
     volumes:
       - datanode1:/opt/hadoop/dfs/data
-      - "./config/krb5.conf:/etc/krb5.conf"
       - "/etc/localtime:/etc/localtime:ro"      
     restart: always
     networks:
       deitosnet:
         ipv4_address: 172.28.1.3
     extra_hosts:
-      - "kdc.deitos.network:172.28.1.7"
       - "metastore.deitos.network:172.28.1.1"
       - "master.deitos.network:172.28.1.2"
       - "worker2.deitos.network:172.28.1.4"
       - "history.deitos.network:172.28.1.5"
 
   worker2:
-    image: deitos-worker-image
+    image: deitos-lite-worker-image
     container_name: deitos-worker2
     hostname: worker2.deitos.network
     depends_on:
@@ -167,37 +114,29 @@ services:
       SPARK_MASTER_HOST: 172.28.1.2
       SPARK_LOCAL_IP: 172.28.1.4
       SPARK_LOCAL_HOSTNAME: worker2.deitos.network
-      ENV KERBEROS_ADMIN: admin/admin
-      ENV KERBEROS_ADMIN_PASSWORD: admin
-      KERBEROS_ROOT_USER_PASSWORD: password
-      REALM: DEITOS.NETWORK
-      DOMAIN_REALM: deitos.network
-      FQDN: worker2.deitos.network
-      KEYTAB_DIR: /opt/hadoop/etc/hadoop/keytabs
     ports:
       - "8041:8040"
       - "8043:8042"
       - "8082:8081"
       - "9868:9867"
+      - "9865:9864"
       - "50011:50010"
       - "50076:50075"
     volumes:
       - datanode2:/opt/hadoop/dfs/data
-      - "./config/krb5.conf:/etc/krb5.conf"
       - "/etc/localtime:/etc/localtime:ro"      
     restart: always
     networks:
       deitosnet:
         ipv4_address: 172.28.1.4
     extra_hosts:
-      - "kdc.deitos.network:172.28.1.7"
       - "metastore.deitos.network:172.28.1.1"
       - "master.deitos.network:172.28.1.2"
       - "worker1.deitos.network:172.28.1.3"
       - "history.deitos.network:172.28.1.5"
 
   history:
-    image: deitos-history-image
+    image: deitos-lite-history-image
     container_name: deitos-history
     hostname: history.deitos.network
     depends_on:
@@ -206,92 +145,20 @@ services:
       SPARK_MASTER_HOST: 172.28.1.2
       SPARK_LOCAL_IP: 172.28.1.5
       SPARK_LOCAL_HOSTNAME: history.deitos.network
-      ENV KERBEROS_ADMIN: admin/admin
-      ENV KERBEROS_ADMIN_PASSWORD: admin
-      KERBEROS_ROOT_USER_PASSWORD: password
-      REALM: DEITOS.NETWORK
-      DOMAIN_REALM: deitos.network
-      FQDN: history.deitos.network
-      KEYTAB_DIR: /opt/hadoop/etc/hadoop/keytabs
     ports:
       - "18080:18080"
       - "19888:19888"
     restart: always
     volumes:
-      - "./config/krb5.conf:/etc/krb5.conf"
       - "/etc/localtime:/etc/localtime:ro"      
     networks:
       deitosnet:
           ipv4_address: 172.28.1.5
     extra_hosts:
-      - "kdc.deitos.network:172.28.1.7"
       - "metastore.deitos.network:172.28.1.1"      
       - "master.deitos.network:172.28.1.2"
       - "worker1.deitos.network:172.28.1.3"
       - "worker2.deitos.network:172.28.1.4"
-
-  jupyter:
-    image: deitos-jupyter-image
-    container_name: deitos-jupyter
-    hostname: jupyter.deitos.network
-    environment:
-      ENV KERBEROS_ADMIN: admin/admin
-      ENV KERBEROS_ADMIN_PASSWORD: admin
-      KERBEROS_ROOT_USER_PASSWORD: password
-      REALM: DEITOS.NETWORK
-      DOMAIN_REALM: deitos.network
-      FQDN: master.deitos.network 
-    depends_on:
-      - master
-    ports:
-      - "8888:8888"
-    volumes:
-      - ./jupyter:/home/jupyter
-      - "./config/krb5.conf:/etc/krb5.conf"
-      - "/etc/localtime:/etc/localtime:ro"      
-    restart: always
-    networks:
-      deitosnet:
-        ipv4_address: 172.28.1.6
-    extra_hosts:
-      - "kdc.deitos.network:172.28.1.7"
-      - "metastore.deitos.network:172.28.1.1"      
-      - "master.deitos.network:172.28.1.2"
-      - "worker1.deitos.network:172.28.1.3"
-      - "worker2.deitos.network:172.28.1.4"
-      - "history.deitos.network:172.28.1.5"
-
-  ldap:
-    image: osixia/openldap:latest
-    container_name: deitos-ldap
-    hostname: ldap.deitos.network
-    ports:
-      - "389:389"
-    environment:
-      LDAP_ORGANISATION: DEITOS
-      LDAP_DOMAIN: deitos.network
-      LDAP_ADMIN_PASSWORD: admin
-      LDAP_BASE_DN: dc=deitos,dc=network
-    networks:
-      deitosnet:
-        ipv4_address: 172.28.1.8
-
-  ldap-console:
-    image: osixia/phpldapadmin:latest
-    container_name: deitos-ldap-console
-    hostname: ldap-console.deitos.network
-    depends_on:
-      - ldap
-    environment:
-      PHPLDAPADMIN_LDAP_HOSTS: ldap.deitos.network    
-    ports:
-      - "20080:80"
-      - "20443:443"
-    networks:
-      deitosnet:
-        ipv4_address: 172.28.1.9
-    extra_hosts:
-      - "ldap.deitos.network:172.28.1.8"
 
 volumes:
   namenode:

@@ -3,16 +3,9 @@ version: "3"
 services:
 
   deitos-client:
-    image: deitos-client-image
+    image: deitos-lite-client-image
     container_name: deitos-client
     hostname: client.deitos.network
-    environment:
-      ENV KERBEROS_ADMIN: admin/admin
-      ENV KERBEROS_ADMIN_PASSWORD: admin
-      KERBEROS_ROOT_USER_PASSWORD: password
-      REALM: DEITOS.NETWORK
-      DOMAIN_REALM:  deitos.network
-      FQDN: master.deitos.network 
     ports:
       - "8889:8888"
     volumes:
@@ -24,12 +17,10 @@ services:
       deitosnet:
         ipv4_address: 172.28.1.24
     extra_hosts:
-      - "kdc.deitos.network:172.28.1.7"
       - "metastore.deitos.network:172.28.1.1"      
       - "master.deitos.network:172.28.1.2"
       - "worker1.deitos.network:172.28.1.3"
       - "worker2.deitos.network:172.28.1.4"
-      - "llama2.deitos.network:172.28.1.20"
 
 networks:
   deitosnet:

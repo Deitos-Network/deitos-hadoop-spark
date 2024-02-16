@@ -1,4 +1,0 @@
-dn: cn=users,ou=groups,dc=deitos,dc=network
-objectClass: top
-objectClass: posixGroup
-gidNumber: 678

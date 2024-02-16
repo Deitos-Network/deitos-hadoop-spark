@@ -43,27 +43,6 @@
      <value>100.0</value>
   </property>
 
-  <!-- <property>
-     <name>yarn.resourcemanager.principal</name>
-     <value>rm/_HOST@DEITOS.NETWORK</value>
-  </property>
-   
-    <property>
-        <name>yarn.resourcemanager.keytab</name>
-        <value>/opt/hadoop/etc/hadoop/keytabs/rm.keytab</value>
-    </property>
-   
-  <property>
-       <name>yarn.nodemanager.principal</name>
-       <value>nm/_HOST@DEITOS.NETWORK</value>
-  </property>
-   
-  <property>
-       <name>yarn.nodemanager.keytab</name>
-       <value>/opt/hadoop/etc/hadoop/keytabs/nm.keytab</value>
-  </property>
-    -->
- 
     <!-- Resource Management By Node --> 
     <property>
         <name>yarn.nodemanager.resource.cpu-vcores</name>
@@ -92,49 +71,5 @@
         <value>4</value>
     </property>
 
-  <!-- <property>
-       <name>yarn.nodemanager.container-executor.class</name>
-       <value>org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor</value>
-  </property>
-   
-  <property>
-       <name>yarn.nodemanager.linux-container-executor.path</name>
-       <value>/usr/local/hadoop/bin/container-executor</value>
-  </property>
-   
-  <property>
-       <name>yarn.nodemanager.linux-container-executor.group</name>
-       <value>root</value>
-  </property> -->
-   
-  <!-- <property>
-       <name>yarn.timeline-service.principal</name>
-       <value>yarn/_HOST@DEITOS.NETWORK</value>
-  </property>
-   
-  <property>
-       <name>yarn.timeline-service.keytab</name>
-       <value>/opt/hadoop/etc/hadoop/keytabs/yarn.keytab</value>
-  </property>
-   
-  <property>
-       <name>yarn.resourcemanager.webapp.delegation-token-auth-filter.enabled</name>
-       <value>true</value>
-  </property>
-   
-  <property>
-       <name>yarn.timeline-service.http-authentication.type</name>
-       <value>kerberos</value>
-  </property>
-   
-  <property>
-       <name>yarn.timeline-service.http-authentication.kerberos.principal</name>
-       <value>HTTP/_HOST@DEITOS.NETWORK</value>
-  </property>
-   
-  <property>
-       <name>yarn.timeline-service.http-authentication.kerberos.keytab</name>
-       <value>/opt/hadoop/etc/hadoop/keytabs/yarn.keytab</value>
-  </property> -->
 
 </configuration>
