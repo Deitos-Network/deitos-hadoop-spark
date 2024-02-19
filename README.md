@@ -10,17 +10,13 @@ This project shows how a set of containers can be deployed on the side of an inf
 ## Infrastructure provider services
 
 
-On the side of the infrastructure provider, a Hadoop Cluster is installed, with 1 NameNode and 2 Datanodes, also, a Spark Cluster is installed with 1 Driver and 2 Slaves. All the security of the ecosystem is implemented over Kerberos and LDAP. The users that can access the cluster require to be created in Kerberos, who is responsible for their authentication, the LDAP server serves to organize the structure of Groups and Users on which define the permissions scheme in the directory structure that is created in the HDFS file system by the infrastructure provider.
-
-This Docker instance also provides a Jupyter-based service to test the functionality of the services offered through a sample Python-based notebook.
+On the side of the infrastructure provider, a Hadoop Cluster is installed, with 1 NameNode and 1 Datanode, also, a Spark Cluster is installed with 1 Driver and 1 Slave. 
 
 ### Software Used
 
 * [Hadoop 3.3.6](https://hadoop.apache.org/)
 * [Hive 3.1.3](http://hive.apache.org/)
 * [Spark 3.4.1](https://spark.apache.org/)
-* [Jupyter 3.4.3](https://jupyter.org/)
-* [Llama-2 7B](https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF)
 
 ### OS Compatibility and Support
 
@@ -142,63 +138,41 @@ Show results of Execution:
 
 ### Testing Services Hadoop using WebHDFS
 
-Among the services deployed in the Infrastructure Provider is the WebHDFS Rest API, which allows performing operations with the HDFS file system. To do this, the test_user will be validated in Kerberos, obtaining a Delegation Token that can later be used to list directories in a specific path of the file system and upload a file to a specific location.
+Among the services deployed in the Infrastructure Provider is the WebHDFS Rest API, which allows performing operations with the HDFS file system. To do this, the jovyan user is used to list directories in a specific path of the file system and upload a file to a specific location.
 
 The examples and tests presented below are performed using the curl command, which provides a lot of flexibility.
 
-For make this activies, in necessary enter in deitos-client node using the command in your bash session: 
+For make this activies, in necessary create a bash session in your local machina using the command: 
 ```
-docker exec -it deitos-client bash
+bash
 ```
+
+
+Edit file /etc/hosts and add entries for deitos containers:
+```
+sudo /etc/hosts
+
+#Add entries to /etc/hosts file 
+
+127.0.0.1   	master.deitos.network
+127.0.0.1	worker1.deitos.network
+```
+
 
 To interact with the API execute the following sequence of commands using the curl command, note that each instruction is documented with a comment indicating the operation and usefulness of the command:
-```
-# Autheticate User
-kinit -kt /home/jovyan/keytabs/current-jupyter.keytab test_user/$(hostname -f)@DEITOS.NETWORK
 
+
+```
 # Get Delegation Token
-curl -v -i -k --negotiate -u : "https://master.deitos.network:50470/webhdfs/v1/data/test_user?op=GETDELEGATIONTOKEN"
+curl -v -i  "http://master.deitos.network:50070/webhdfs/v1/data/test_user?user.name=jovyan&op=GETDELEGATIONTOKEN"
 
 
 # List Directory
-curl -v -i -k "https://master.deitos.network:50470/webhdfs/v1/?delegation=<token>&op=LISTSTATUS"
+curl -v -i  "http://master.deitos.network:50070/webhdfs/v1/?user.name=jovyan&op=LISTSTATUS"
 
 # Define Upload Operation to API - The Response is a Redirect Address to Execute the final Operation
-curl -v -i -k --negotiate -u : -X PUT "https://master.deitos.network:50470/webhdfs/v1/data/test_user/test.txt?delegation=<token>&op=CREATE"
+curl -v -i -X PUT "http://master.deitos.network:50070/webhdfs/v1/data/test_user/README.md?user.name=jovyan&op=CREATE"
 
 # Upload File to the API
-curl -i -k -X PUT -T test/test.txt "https://worker1.deitos.network:50075/webhdfs/v1/data/test_user/test.txt?op=CREATE&delegation=<token>&namenoderpcaddress=master.deitos.network:8020&createflag=&createparent=true&overwrite=true"
-```
-
-## Testing Services Hadoop/Spark/Hive from Jupyter Notebook
-
-Access the Service using the Internet Browser and Open the Notebook named pyspark.ipnb
-
-http://localhost:8889/notebooks/pyspark.ipynb
-
-Execute the each instructions to tests functionalities (The Script show some commons functions used when work with Hadoop/Hive/Spark)
-
-![Jupyter Notebook](docs/jupyter-notebook.png)
-
-## Testing Environment Llama2
-
-Among the services configured in the infrastructure provider is a Flask-based application that uses a Llama2-based LLM model to do some very simple tasks, this section shows how to test this service using the curl command.
-
-Enter into deitos-client node using the command in your bash session: 
-```
-docker exec -it deitos-client bash
-```
-
-Use curl to test the Llama2 Service
-```
-curl -X POST -H "Content-Type: application/json" -d '{
-  "system_message": "You are a helpful assistant",
-  "user_message": "Generate a list of 5 funny dog names",
-  "max_tokens": 100
-}' http://llama2.deitos.network:5000/llama
-```
-
-View the results:
-![Llama2 Results](docs/llama2-result.png)
-
+curl -v -i -X PUT -T README.md "http://worker1.deitos.network:9864/webhdfs/v1/data/test_user/README.md?op=CREATE&user.name=jovyan&namenoderpcaddress=master.deitos.network:8020&createflag=&createparent=true&overwrite=false"
 
