@@ -108,28 +108,25 @@ To start the client services, run the corresponding script command:
 
 ### Testing Services Hadoop using Command-line
 
-To test the services we will need to login to the client docker node, validate in kerberos using a keytab file corresponding to a test user that was created during the installation process.
+To test the services we will need to login to the client docker node, for it, enter into deitos-client node using the command in your bash session: 
 
-Enter into deitos-client node using the command in your bash session: 
 ```
 docker exec -it deitos-client bash
 ```
 
-To verify access to the services, we authenticate to kerberos with the user named test_user and run a command to list the directories in the root of the HDFS file system.
+Run a command to list the directories in the root of the HDFS file system.
 
 ```
-# Autheticate User
-kinit -kt /home/jovyan/keytabs/current-jupyter.keytab test_user/$(hostname -f)@DEITOS.NETWORK
 
 # Make ls to HDFS Filesystem
-hdfs dfs -ls /data/test_user
+hdfs dfs -ls /data/deitos
 ```
 
 ![List HDFS Filesystem](docs/list-hdfs.png)
 
 It is possible to upload a sample file to a specific path in the HDFS file system hosted on the client node. We can use the command:
 ```
-hdfs dfs -put test/test.txt /data/test_user
+hdfs dfs -put test/test.txt /data/deitos
 ```
 
 Show results of Execution:
@@ -164,15 +161,15 @@ To interact with the API execute the following sequence of commands using the cu
 
 ```
 # Get Delegation Token
-curl -v -i  "http://master.deitos.network:50070/webhdfs/v1/data/test_user?user.name=jovyan&op=GETDELEGATIONTOKEN"
+curl -v -i  "http://master.deitos.network:50070/webhdfs/v1/data/deitos?user.name=jovyan&op=GETDELEGATIONTOKEN"
 
 
 # List Directory
 curl -v -i  "http://master.deitos.network:50070/webhdfs/v1/?user.name=jovyan&op=LISTSTATUS"
 
 # Define Upload Operation to API - The Response is a Redirect Address to Execute the final Operation
-curl -v -i -X PUT "http://master.deitos.network:50070/webhdfs/v1/data/test_user/README.md?user.name=jovyan&op=CREATE"
+curl -v -i -X PUT "http://master.deitos.network:50070/webhdfs/v1/data/deitos/README.md?user.name=jovyan&op=CREATE"
 
 # Upload File to the API
-curl -v -i -X PUT -T README.md "http://worker1.deitos.network:9864/webhdfs/v1/data/test_user/README.md?op=CREATE&user.name=jovyan&namenoderpcaddress=master.deitos.network:8020&createflag=&createparent=true&overwrite=false"
+curl -v -i -X PUT -T README.md "http://worker1.deitos.network:9864/webhdfs/v1/data/deitos/README.md?op=CREATE&user.name=jovyan&namenoderpcaddress=master.deitos.network:8020&createflag=&createparent=true&overwrite=false"
 

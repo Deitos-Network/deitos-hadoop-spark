@@ -42,17 +42,11 @@ then
   hdfs dfs -put "$SPARK_HOME"/jars/* "$SPARK_JARS_HDFS_PATH"/
 fi
 
-# echo "Setting Permissions for Users"
-# hdfs dfs -chown -R  root:users  /
-# hdfs dfs -chmod -R 775 /user
-# hdfs dfs -chmod -R 775 /var
-
 if ! hdfs dfs -test -d "/data"
 then
   echo "Generating HOME Path for Users: /data"
   hdfs dfs -mkdir /data
-  hdfs dfs -mkdir /data/test_user
-  # hdfs dfs -chown -R test_user:root /data/test_user
+  hdfs dfs -mkdir /data/deitos
 fi
 
 echo "Starting Hive Metastore..."
