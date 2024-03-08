@@ -20,16 +20,18 @@ RUN apt-get -qq update  \
 
 WORKDIR /node-template
 
-RUN wget --no-check-certificate https://github.com/Deitos-Network/deitos-node/releases/download/v0.0.1/deitos-node  -O deitos-node
+RUN wget --no-check-certificate https://github.com/Deitos-Network/deitos-node/releases/download/v0.0.2/deitos-node  -O deitos-node
 RUN chmod 755 deitos-node
 RUN mv /node-template/deitos-node /usr/local/bin
 
 RUN git clone https://github.com/Deitos-Network/deitos-verifier.git
-RUN mv deitos-verifier /node-template/
-
 WORKDIR /node-template/deitos-verifier
+RUN  cargo build --release
 
-RUN  build --release
+WORKDIR /node-template
+RUN git clone https://github.com/Deitos-Network/deitos-gate.git
+WORKDIR /node-template/deitos-gate
+RUN  cargo build --release
 
 WORKDIR /node-template
 
@@ -38,15 +40,16 @@ RUN useradd -m -u 1000 -U -s /bin/sh -d /node-dev node-dev && \
   chown -R node-dev:node-dev /chain-data && \
   ln -s /chain-data /node-dev/.local/share/deitos-node && \
   # unclutter and minimize the attack surface
-  rm -rf /usr/bin /usr/sbin && \
+  # rm -rf /usr/bin /usr/sbin && \
   # check if executable works in this container
   /usr/local/bin/deitos-node --version 
 
-
 USER node-dev
 
-EXPOSE 30333 9933 9944 9615 4040
+EXPOSE 30333 9933 9944 9615 4040 9090
 VOLUME ["/chain-data"]
+
+USER root
 
 COPY run.sh /usr/local/sbin/run.sh
 RUN sudo chmod a+x /usr/local/sbin/run.sh 
