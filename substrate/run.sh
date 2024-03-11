@@ -17,6 +17,8 @@ export HDFS_URI="http://127.0.0.1:50070"
 
 echo "Starting deitos-node ..."
 
-/usr/local/bin/deitos-node --base-path /tmp/alice --chain local --alice --port 30333 --rpc-port 9944 --node-key 0000000000000000000000000000000000000000000000000000000000000001 --validator --force-authoring --unsafe-rpc-external --rpc-cors=all --execution-offchain-worker both
+
+/usr/local/bin/deitos-node --tmp --dev --rpc-external --port 30333 --rpc-port 9944 --execution-offchain-worker both
+
 
 while true; do sleep 1000; done
