@@ -5,7 +5,7 @@
 
 Deitos incorporates blockchain technology to transform the consumption of Big Data and AI services. 
 
-This project shows how a set of containers can be deployed on the side of an infrastructure provider to start a [Deitos Node](https://github.com/Deitos-Network/deitos-node) and a set of Hadoop-based services (Hadoop / Spark / Hive), it also shows the deployment of a Jupyter-based client that can use the services offered by the infrastructure provider and Llama v2 for LLM processing.
+This project shows how a set of containers can be deployed on the side of an infrastructure provider to start a [Deitos Node](https://github.com/Deitos-Network/deitos-node) and a set of Hadoop-based services (Hadoop / Spark / Hive).
 
 ## Infrastructure provider services
 
@@ -53,7 +53,7 @@ hdfs dfsadmin -report
 You should get a output similar to the next:
 ![HDFS Admin Report](docs/hdfs-report.png)
 
-In the attached image you can verify that the cluster is composed by  2 datanodes and both are alive, one of them is called worker1.deitos.network.
+In the attached image you can verify that the cluster is composed by  1 datanode and one is alive, this is called worker1.deitos.network.
 
 **❗ IMPORTANT: Please note that the process of starting the hadoop cluster may take some time, depending on the hardware resources of your machine. Please wait a couple of minutes until everything gets syncronized.**
 
@@ -71,16 +71,10 @@ master: http://localhost:8080
 
 ![SPARK Console](docs/spark-console.png)
 
-On the infrastructure provider side, you can access the Jupyter programming interface, with which you can test the use of Spark / Hadoop and Hive through a Notebook example, once validated in the system. 
-
-URL: http://localhost:8888
-example: [jupyter/notebook/pyspark.ipynb](http://localhost:8888/notebooks/pyspark.ipynb)
-
-![Jupyter Main Window](docs/jupyter-main-window.png)
 
 ## Deitos Blockchain Node
 
-The [latest release of a Deitos Blockchain Node](https://github.com/Deitos-Network/deitos-node/releases/tag/v0.0.1) is included as part of the IP technology stack.
+The [latest release of a Deitos Blockchain Node](https://github.com/Deitos-Network/deitos-node/releases/tag/v0.0.2) is included as part of the IP technology stack.
 
 The Deitos Node can be accessed using PolkadotJS with the following URL:
 
@@ -92,50 +86,6 @@ https://polkadot.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A9944#/explorer
 
 Please Make sure that no other substrate node is running under the default ports like 9944 or 30333.
 
-## Client services
-
-Docker instance  provides a Jupyter-based service to test the functionalities of the services offered through a sample Python-based notebook, and also allows working on command line to test different instructions to use the services offered by the infrastructure provider.
-
-### Starting Client
-
-To start the client services, run the corresponding script command:
-```
-./start-client.sh
-```
-
-![Start Services Client](docs/start-services-client.png)
-
-
-### Testing Services Hadoop using Command-line
-
-To test the services we will need to login to the client docker node, validate in kerberos using a keytab file corresponding to a test user that was created during the installation process.
-
-Enter into deitos-client node using the command in your bash session: 
-```
-docker exec -it deitos-client bash
-```
-
-To verify access to the services, we authenticate to kerberos with the user named test_user and run a command to list the directories in the root of the HDFS file system.
-
-```
-# Autheticate User
-kinit -kt /home/jovyan/keytabs/current-jupyter.keytab test_user/$(hostname -f)@DEITOS.NETWORK
-
-# Make ls to HDFS Filesystem
-hdfs dfs -ls /data/test_user
-```
-
-![List HDFS Filesystem](docs/list-hdfs.png)
-
-It is possible to upload a sample file to a specific path in the HDFS file system hosted on the client node. We can use the command:
-```
-hdfs dfs -put test/test.txt /data/test_user
-```
-
-Show results of Execution:
-![Command-line Results](docs/commandline-results.png)
-
-
 ### Testing Services Hadoop using WebHDFS
 
 Among the services deployed in the Infrastructure Provider is the WebHDFS Rest API, which allows performing operations with the HDFS file system. To do this, the jovyan user is used to list directories in a specific path of the file system and upload a file to a specific location.
@@ -146,7 +96,6 @@ For make this activies, in necessary create a bash session in your local machina
 ```
 bash
 ```
-
 
 Edit file /etc/hosts and add entries for deitos containers:
 ```
@@ -175,4 +124,4 @@ curl -v -i -X PUT "http://master.deitos.network:50070/webhdfs/v1/data/test_user/
 
 # Upload File to the API
 curl -v -i -X PUT -T README.md "http://worker1.deitos.network:9864/webhdfs/v1/data/test_user/README.md?op=CREATE&user.name=jovyan&namenoderpcaddress=master.deitos.network:8020&createflag=&createparent=true&overwrite=false"
-
+```
